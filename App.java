@@ -1,37 +1,54 @@
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
 public class App{
+    public static final double[] conversionTableForVolumes={3.7854, 0.47318, 0.014787, 0.004929, 28.3168, 764.555, 0.016387, 1, 0.001, 1000, 0.001, 0.946353, 0.47318};
+    public static final double[] conversionTableForLength={1609.34, 0.9144, 0.3048, 0.0254, 1, 1000, 0.01, 1852};
+    public static final String[] volumeUnits={"Gallon", "Cup", "Tablespoon", "Teaspoon", "Cubic Feet", "Cubic Yard", "Cubic Inch", "Liter", "Milliliter", "Cubic Meter", "Cubic Centimeter", "Quart", "Pint"}; 
+    public static final String[] lengthUnits={"Mile", "Yard", "Feet", "Inch", "Meter", "Kilometer", "Centimeter", "Nautical Mile"};
+    public static final String[] temperatureUnits={"Fahrenheit", "Celsius", "Kelvin"};
     public static void main(String[] args) throws Exception{
         JFrame frame=new JFrame();
         JPanel volumePanel=new JPanel();
         JPanel lengthPanel=new JPanel();
         JPanel temperaturePanel=new JPanel();
         JPanel mainPanel=new JPanel();
-        mainPanel.setLayout(new GridLayout(1,3,1,1));
         JLabel titleLabel=new JLabel("Unit Converter");
-        titleLabel.setFont(new Font("EB Garamond", Font.BOLD, 20));
+        titleLabel.setFont(new Font("EB Garamond", Font.BOLD, 35));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         volumePanel.setBorder(new TitledBorder("Volume"));
+        JComboBox<String> volumeDropdownOne=new JComboBox<String>(volumeUnits);
+        JComboBox<String> volumeDropdownTwo=new JComboBox<String>(volumeUnits);
+        volumePanel.add(volumeDropdownOne, BorderLayout.CENTER);
+        volumePanel.add(volumeDropdownTwo, BorderLayout.CENTER);
         lengthPanel.setBorder(new TitledBorder("Length"));
+        JComboBox<String> lengthDropdownOne=new JComboBox<String>(lengthUnits);
+        JComboBox<String> lengthDropdownTwo=new JComboBox<String>(lengthUnits);
+        lengthPanel.add(lengthDropdownOne, BorderLayout.CENTER);
+        lengthPanel.add(lengthDropdownTwo, BorderLayout.CENTER);
         temperaturePanel.setBorder(new TitledBorder("Temperature"));
+        JComboBox<String> temperatureDropdownOne=new JComboBox<String>(temperatureUnits);
+        JComboBox<String> temperatureDropdownTwo=new JComboBox<String>(temperatureUnits);
+        temperaturePanel.add(temperatureDropdownOne, BorderLayout.CENTER);
+        temperaturePanel.add(temperatureDropdownTwo, BorderLayout.CENTER);
         frame.setTitle("Unit Converter");
         frame.getContentPane().setLayout(new BorderLayout());
         frame.getContentPane().setBackground(Color.decode("#DFDFDF"));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainPanel.setLayout(new GridLayout(1,3,1,1));
         mainPanel.add(volumePanel);
         mainPanel.add(lengthPanel);
         mainPanel.add(temperaturePanel);
         frame.add(titleLabel, BorderLayout.PAGE_START);
         frame.add(mainPanel);
-        frame.setSize(800, 600);
+        frame.setSize(1280, 720);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
