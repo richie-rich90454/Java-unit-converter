@@ -46,22 +46,25 @@ Convert between 3 temperature units:
    - Automatic conversion appears in the other field
    - Supports decimal values and negative numbers (single "-" becomes -1)
 ## Installation & Running
-1. **Requirements**
-   - Java Development Kit (JDK) 8 or higher
+
+1. **Requirements**  
+   - Java Development Kit (JDK) 8 or higher  
    - Project directory structure (ignoring non-code parts and .gitignore):
-        Java-unit-converter/
-            ├── App.java
-            ├── fonts/
-            │ ├── NotoSans-Regular.ttf
-            │ ├── NotoSans-Bold.ttf
-            │ └── EBGaramond-Regular.ttf
-            └── licenses/
-            ├── OFL-Noto_Sans.txt
-            └── OFL-EB_Garamond.txt
-2. **Compile and Run**
-    ```bash
-    javac *.java
-    java App
+     ```
+     Java-unit-converter/
+     ├── App.java
+     ├── fonts/
+     │   ├── NotoSans-Regular.ttf
+     │   ├── NotoSans-Bold.ttf
+     │   └── EBGaramond-Regular.ttf
+     └── licenses/
+         ├── OFL-Noto_Sans.txt
+         └── OFL-EB_Garamond.txt
+     ```
+2. **Compile and Run**  
+   ```bash
+   javac *.java
+   java App
 3. **Troubleshooting**
     - If fonts do not load:
         - Verify the /fonts directory exists in the project root
