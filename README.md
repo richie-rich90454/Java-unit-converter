@@ -1,6 +1,7 @@
 # Java Unit Converter
 A Java Swing application for converting between volume, length, and temperature units with real-time calculations.
 ![Screenshot](screenshot.png) <!-- Add actual screenshot if available -->
+<!-- screenshot.png would be added later after full completion of the program-->
 ## Features
 ### 1. Volume Conversion
 Convert between 13 volume units:
@@ -74,3 +75,22 @@ Convert between 3 temperature units:
     - If the Graphical User Interface looks strange:
         - Check if the fonts have loaded
         - Check for any error messages
+## Font Attribution
+This application uses the following fonts under the [SIL Open Font License (OFL)](https://scripts.sil.org/OFL):
+    ### EB Garamond
+    - **Author**: Georg Duffner  
+    - **Source**: [https://github.com/octaviopardo/EBGaramond12](https://github.com/octaviopardo/EBGaramond12)  
+    - **License**: [font_licenses/OFL-EB_Garamond.txt](font_licenses/OFL-EB_Garamond.txt)  
+    ### Noto Sans
+    - **Author**: Google Inc.  
+    - **Source**: [https://github.com/notofonts/latin-greek-cyrillic](https://github.com/notofonts/latin-greek-cyrillic)  
+    - **License**: [font_licenses/OFL-Noto_Sans.txt](font_licenses/OFL-Noto_Sans.txt)  
+## License Compliance
+    This application complies with SIL OFL requirements by:  
+    1. Including original font files without modification  
+    2. Bundling complete OFL license texts  
+    3. Maintaining original copyright notices  
+    4. Not selling fonts independently of the application  
+    5. Providing clear attribution in documentation  
+    Full license texts are available in the [licenses/](licenses/) directory.  
+**Note:** This application's code is licensed under [MIT License](LICENSE). Font licenses apply only to the font files themselves.  
