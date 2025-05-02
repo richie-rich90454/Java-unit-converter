@@ -18,6 +18,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.InputStream;
+import java.util.Locale;
 import java.awt.BorderLayout;
 /*
     Program: Java Unit Converter
@@ -32,7 +33,8 @@ import java.awt.BorderLayout;
         4. UIManager: https://www.geeksforgeeks.org/java-swing-look-feel/
         5. Font.createFont(): https://stackoverflow.com/questions/16761630/font-createfont-set-color-and-size-java-awt-font
         6. GraphicsEnvironment: https://docs.oracle.com/javase/8/docs/api/java/awt/GraphicsEnvironment.html
-
+        7. Try/Catch: https://www.w3schools.com/java/java_try_catch.asp, https://www.geeksforgeeks.org/try-catch-throw-and-throws-in-java/
+        8. Locale: https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html
  */
 public class App{
     //Declares static variables for use in the frame
@@ -188,6 +190,8 @@ public class App{
         UIManager.put("TextField.foreground", Color.decode("#000000"));
     }
     public static void main(String[] args) throws Exception{
+        //Sets Program Language to English
+        Locale.setDefault(Locale.ENGLISH);
         //Initializes basic components such as the frame, various panels for conversion, and does some styling on them by setting the font, font size, title, and text alignment; additional basic initiation is set by setting the frame title, setting it to use border layout and the main panel to use grid layout and other panels to use border layout, and setting the default close operation of ending the program
         JFrame frame=new JFrame();
         volumePanel=new JPanel();
