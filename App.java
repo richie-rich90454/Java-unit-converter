@@ -118,7 +118,7 @@ public class App{
                         else{
                             convertedDouble=originalDouble*unitConversionTable[inputUnitIndex]/unitConversionTable[writeUnitIndex];
                         }
-                        writeField.setText(""+convertedDouble);
+                        writeField.setText(""+formatDoubleValues(convertedDouble));
                     }
                 }
             };
@@ -140,7 +140,7 @@ public class App{
                 return (inputValue*(9/5))+32;
             }
             else if (writeIndex==2){
-                return inputIndex+273.15;
+                return inputValue+273.15;
             }
         }
         else if (inputIndex==2){
@@ -152,6 +152,10 @@ public class App{
             }
         }
         return inputValue;
+    }
+    //Formats all double numbers (returns as a String) to three decimal places (the meaning of %.3f)
+    public static String formatDoubleValues(double number){
+        return String.format("%.3f", number);
     }
     public static void main(String[] args) throws Exception{
         //Initializes basic components such as the frame, various panels for conversion, and does some styling on them by setting the font, font size, title, and text alignment; additional basic initiation is set by setting the frame title, setting it to use border layout and the main panel to use grid layout and other panels to use border layout, and setting the default close operation of ending the program
