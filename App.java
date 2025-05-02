@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import java.awt.Color;
 import java.awt.Font;
@@ -27,7 +28,10 @@ import java.awt.BorderLayout;
     References:
         1. JOptionPane: https://www.geeksforgeeks.org/java-joptionpane/
         2. JComboBox: https://www.geeksforgeeks.org/java-swing-jcombobox-examples/
-        3. KeyListener/KeyAdapter (used together): https://www.geeksforgeeks.org/java-keylistener-in-awt/, https://stackoverflow.com/questions/10876491/how-to-use-keylistener, https://www.tutorialspoint.com/swing/swing_keyadapter.htm
+        3. KeyListener/KeyAdapter (used together): https://www.geeksforgeeks.org/java-keylistener-in-awt/, https://stackoverflow.com/questions/10876491/how-to-use-keylistener, https://www.tutorialspoint.com/swing/swing_keyadapter.htm, https://docs.oracle.com/javase/8/docs/api/java/awt/event/KeyAdapter.html
+        4. UIManager: https://www.geeksforgeeks.org/java-swing-look-feel/
+        5. Font.createFont(): https://stackoverflow.com/questions/16761630/font-createfont-set-color-and-size-java-awt-font
+        6. GraphicsEnvironment: https://docs.oracle.com/javase/8/docs/api/java/awt/GraphicsEnvironment.html
 
  */
 public class App{
@@ -164,9 +168,25 @@ public class App{
         }
     }
     //Allocates custom font for the UI:
-    // static{
-    //     regi
-    // }
+    static{
+        includeFont("/fonts/NotoSans-Regular.ttf");
+        includeFont("/fonts/NotoSans-Bold.ttf");
+        includeFont("/fonts/EBGaramond-Regular.ttf");
+        Font notoSans=new Font("Noto Sans", Font.PLAIN, 14);
+        Font notoSansBold=new Font("Noto Sans", Font.BOLD, 14);
+        Font ebGaramond=new Font("EB Garamond", Font.PLAIN, 16);
+        UIManager.put("Label.font", notoSans);
+        UIManager.put("Button.font", notoSansBold);
+        UIManager.put("TextField.font", ebGaramond);
+        UIManager.put("ComboBox.font", ebGaramond);
+        UIManager.put("OptionPane.messageFont", ebGaramond);
+        UIManager.put("TitledBorder.font", notoSansBold);
+        UIManager.put("Panel.background", Color.decode("#FFFFFF"));
+        UIManager.put("Button.background", Color.decode("#DE0000"));
+        UIManager.put("Button.foreground", Color.decode("#000000"));
+        UIManager.put("TextField.background", Color.decode("#FFFFFF"));
+        UIManager.put("TextField.foreground", Color.decode("#000000"));
+    }
     public static void main(String[] args) throws Exception{
         //Initializes basic components such as the frame, various panels for conversion, and does some styling on them by setting the font, font size, title, and text alignment; additional basic initiation is set by setting the frame title, setting it to use border layout and the main panel to use grid layout and other panels to use border layout, and setting the default close operation of ending the program
         JFrame frame=new JFrame();
@@ -175,12 +195,11 @@ public class App{
         temperaturePanel=new JPanel();
         JPanel mainPanel=new JPanel();
         JLabel titleLabel=new JLabel("Unit Converter");
-        titleLabel.setFont(new Font("EB Garamond", Font.BOLD, 35));
+        titleLabel.setFont(new Font("Noto Sans", Font.BOLD, 35));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         volumePanel.setBorder(new TitledBorder("Volume"));
         frame.setTitle("Unit Converter");
         frame.getContentPane().setLayout(new BorderLayout());
-        frame.getContentPane().setBackground(Color.decode("#DFDFDF"));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //Initializes the two dropdown boxes for the volume units and appends them to the volume panel
         volumeDropdownOne=new JComboBox<String>(volumeUnits);
