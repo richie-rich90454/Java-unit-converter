@@ -127,29 +127,23 @@ public class App{
         }
     }
     public static double convertTemperature(double inputValue, int inputIndex, int writeIndex){
-        if (inputIndex==0){
-            if (writeIndex==1){
-                return (inputValue-32)*(5/9);
-            }
-            else if (writeIndex==2){
-                return ((inputValue-32)*(5/9))+273.15;
-            }
+        if (inputIndex==0&&writeIndex==1){
+            return (inputValue-32.0)*(5.0/9.0);
         }
-        else if (inputIndex==1){
-            if (writeIndex==0){
-                return (inputValue*(9/5))+32;
-            }
-            else if (writeIndex==2){
-                return inputValue+273.15;
-            }
+        if (inputIndex==0&&writeIndex==2){
+            return ((inputValue-32.0)*(5.0/9.0))+273.15;
         }
-        else if (inputIndex==2){
-            if (writeIndex==0){
-                return (inputValue-273.15)*(9/5)+32;
-            }
-            else if (writeIndex==1){
-                return inputValue-273.15;
-            }
+        if (inputIndex==1&&writeIndex==0){
+            return (inputValue*(9.0/5.0))+32.0;
+        }
+        if (inputIndex==1&&writeIndex==2){
+            return inputValue+273.15;
+        }
+        if (inputIndex==2&&writeIndex==0){
+            return (inputValue-273.15)*(9.0/5.0)+32.0;
+        }
+        if (inputIndex==2&&writeIndex==1){
+            return inputValue-273.15;
         }
         return inputValue;
     }
