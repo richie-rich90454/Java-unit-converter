@@ -9,12 +9,14 @@ import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.InputStream;
 import java.awt.BorderLayout;
 /*
     Program: Java Unit Converter
@@ -39,6 +41,20 @@ public class App{
     public static final String[] volumeUnits={"Gallon", "Cup", "Tablespoon", "Teaspoon", "Cubic Feet", "Cubic Yard", "Cubic Inch", "Liter", "Milliliter", "Cubic Meter", "Cubic Centimeter", "Quart", "Pint"}; 
     public static final String[] lengthUnits={"Mile", "Yard", "Feet", "Inch", "Meter", "Kilometer", "Centimeter", "Nautical Mile"};
     public static final String[] temperatureUnits={"Fahrenheit", "Celsius", "Kelvin"};
+    //Function to fetch font from the local path and include it in the program
+    public static void includeFont(String fontPath){
+        try (InputStream fontFile=App.class.getResourceAsStream(fontPath)){
+            Font newFont=Font.createFont(Font.TRUETYPE_FONT, fontFile);
+            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(newFont);
+        }
+        catch (Exception exception){
+            System.err.println("Failed to load font "+fontPath+": "+exception);
+        }
+    }
+    //Allocates custom font for the UI:
+    // static{
+    //     regi
+    // }
     public static void generateConverterBox(JPanel unitPanel, JComboBox<String> selectBoxOne, JComboBox<String> selectBoxTwo, String[] convertingUnits, double[] unitConversionTable, boolean isTemperatureConversion){
         int unitOneIndex=selectBoxOne.getSelectedIndex();
         int unitTwoIndex=selectBoxTwo.getSelectedIndex();
