@@ -42,18 +42,24 @@ public class App{
     public static void generateConverterBox(JPanel unitPanel, JComboBox<String> selectBoxOne, JComboBox<String> selectBoxTwo, String[] convertingUnits, double[] unitConversionTable, boolean isTemperatureConversion){
         int unitOneIndex=selectBoxOne.getSelectedIndex();
         int unitTwoIndex=selectBoxTwo.getSelectedIndex();
+        if (unitOneIndex==unitTwoIndex){
+            JOptionPane.showMessageDialog(null, "Please select two distinct units for conversion between them.");
+            return;
+        }
+        while (unitPanel.getComponentCount()>3){
+            unitPanel.remove(3);
+        }
         if (unitOneIndex!=unitTwoIndex){
             JPanel newConversionBox=new JPanel();
-            JTextField unitOneField=new JTextField(5);
-            JTextField unitTwoField=new JTextField(5);
-            while (unitPanel.getComponentCount()>3){
-                unitPanel.remove(3);
-            }
+            JTextField unitOneField=new JTextField(15);
+            JTextField unitTwoField=new JTextField(15);
             newConversionBox.add(new JLabel(convertingUnits[unitOneIndex]));
             newConversionBox.add(unitOneField);
             newConversionBox.add(new JLabel(convertingUnits[unitTwoIndex]));
             newConversionBox.add(unitTwoField);
             unitPanel.add(newConversionBox);
+            unitPanel.revalidate();
+            unitPanel.repaint();
             KeyListener numberInputHandle=new KeyAdapter(){
                 public void keyReleased(KeyEvent event){
                     JTextField inputField=(JTextField) event.getSource();
@@ -71,12 +77,12 @@ public class App{
                         inputUnitIndex=unitTwoIndex;
                     }
                     if (numberInput.equals("-")){
-                        // if (isTemperatureConversion){
-                            
-                        // }
-                        // else{
+                        if (isTemperatureConversion){
+                            writeField.setText(""+convertTemperature(-1, inputUnitIndex, writeUnitIndex));
+                        }
+                        else{
                             writeField.setText(""+(-1*unitConversionTable[inputUnitIndex]/unitConversionTable[writeUnitIndex]));
-                        // }
+                        }
                         return;
                     }
                     else{
@@ -106,21 +112,18 @@ public class App{
                         }
                         double originalDouble=Double.parseDouble(numberInput);
                         double convertedDouble;
-                        // if (isTemperatureConversion){
-                            
-                        // }
-                        // else{
+                        if (isTemperatureConversion){
+                            convertedDouble=convertTemperature(originalDouble, inputUnitIndex, writeUnitIndex);
+                        }
+                        else{
                             convertedDouble=originalDouble*unitConversionTable[inputUnitIndex]/unitConversionTable[writeUnitIndex];
-                        // }
+                        }
                         writeField.setText(""+convertedDouble);
                     }
                 }
             };
             unitOneField.addKeyListener(numberInputHandle);
             unitTwoField.addKeyListener(numberInputHandle);
-        }
-        else{
-            JOptionPane.showMessageDialog(null, "Please select two distinct units for conversion between them.");
         }
     }
     public static double convertTemperature(double inputValue, int inputIndex, int writeIndex){
@@ -202,14 +205,14 @@ public class App{
                 else if (event.getSource().equals(generateLength)){
                     generateConverterBox(lengthPanel, lengthDropdownOne, lengthDropdownTwo, lengthUnits, conversionTableForLength, false);
                 }
-                // else if (event.getSource().equals(generateTemperature)){
-                //     generateConverterBox(temperaturePanel, temperatureDropdownOne, temperatureDropdownTwo, temperatureUnits, null, true);
-                // }
+                else if (event.getSource().equals(generateTemperature)){
+                    generateConverterBox(temperaturePanel, temperatureDropdownOne, temperatureDropdownTwo, temperatureUnits, null, true);
+                }
             }
         };
         generateVolume.addActionListener(buttonHandler);
         generateLength.addActionListener(buttonHandler);
-        // generateTemperature.addActionListener(buttonHandler);
+        generateTemperature.addActionListener(buttonHandler);
         //Configures the grid layout for the main panel and appends the other panels
         mainPanel.setLayout(new GridLayout(1,3,1,1));
         mainPanel.add(volumePanel);
