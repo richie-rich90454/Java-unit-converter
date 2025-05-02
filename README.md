@@ -85,12 +85,12 @@ This application uses the following fonts under the [SIL Open Font License (OFL)
 - **Author**: Google Inc.  
 - **Source**: [https://github.com/notofonts/latin-greek-cyrillic](https://github.com/notofonts/latin-greek-cyrillic)  
 - **License**: [font_licenses/OFL-Noto_Sans.txt](font_licenses/OFL-Noto_Sans.txt)  
-## License Compliance
-    This application complies with SIL OFL requirements by:  
-    1. Including original font files without modification  
-    2. Bundling complete OFL license texts  
-    3. Maintaining original copyright notices  
-    4. Not selling fonts independently of the application  
-    5. Providing clear attribution in documentation  
-    Full license texts are available in the [font_licenses/](font_licenses/) directory.
-**Note:** This application's code is licensed under [MIT License](LICENSE). Font licenses apply only to the font files themselves.  
+### License Compliance
+This application complies with SIL OFL requirements by:
+1. Including original font files without modification  
+2. Bundling complete OFL license texts  
+3. Maintaining original copyright notices  
+4. Not selling fonts independently of the application  
+5. Providing clear attribution in documentation  
+Full license texts are available in the [font_licenses/](font_licenses/) directory.
+**Note:** This application's code is licensed under [MIT License](LICENSE). Font licenses apply only to the font files themselves.
