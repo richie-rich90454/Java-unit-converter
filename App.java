@@ -41,20 +41,6 @@ public class App{
     public static final String[] volumeUnits={"Gallon", "Cup", "Tablespoon", "Teaspoon", "Cubic Feet", "Cubic Yard", "Cubic Inch", "Liter", "Milliliter", "Cubic Meter", "Cubic Centimeter", "Quart", "Pint"}; 
     public static final String[] lengthUnits={"Mile", "Yard", "Feet", "Inch", "Meter", "Kilometer", "Centimeter", "Nautical Mile"};
     public static final String[] temperatureUnits={"Fahrenheit", "Celsius", "Kelvin"};
-    //Function to fetch font from the local path and include it in the program
-    public static void includeFont(String fontPath){
-        try (InputStream fontFile=App.class.getResourceAsStream(fontPath)){
-            Font newFont=Font.createFont(Font.TRUETYPE_FONT, fontFile);
-            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(newFont);
-        }
-        catch (Exception exception){
-            System.err.println("Failed to load font "+fontPath+": "+exception);
-        }
-    }
-    //Allocates custom font for the UI:
-    // static{
-    //     regi
-    // }
     public static void generateConverterBox(JPanel unitPanel, JComboBox<String> selectBoxOne, JComboBox<String> selectBoxTwo, String[] convertingUnits, double[] unitConversionTable, boolean isTemperatureConversion){
         int unitOneIndex=selectBoxOne.getSelectedIndex();
         int unitTwoIndex=selectBoxTwo.getSelectedIndex();
@@ -167,6 +153,20 @@ public class App{
     public static String formatDoubleValues(double number){
         return String.format("%.3f", number);
     }
+    //Function to fetch font from the local path and include it in the program
+    public static void includeFont(String fontPath){
+        try (InputStream fontFile=App.class.getResourceAsStream(fontPath)){
+            Font newFont=Font.createFont(Font.TRUETYPE_FONT, fontFile);
+            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(newFont);
+        }
+        catch (Exception exception){
+            System.err.println("Failed to load font "+fontPath+": "+exception);
+        }
+    }
+    //Allocates custom font for the UI:
+    // static{
+    //     regi
+    // }
     public static void main(String[] args) throws Exception{
         //Initializes basic components such as the frame, various panels for conversion, and does some styling on them by setting the font, font size, title, and text alignment; additional basic initiation is set by setting the frame title, setting it to use border layout and the main panel to use grid layout and other panels to use border layout, and setting the default close operation of ending the program
         JFrame frame=new JFrame();
