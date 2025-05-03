@@ -15,6 +15,7 @@ import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
@@ -44,10 +45,14 @@ import java.awt.BorderLayout;
         9. ImageIcon: https://docs.oracle.com/javase/8/docs/api/javax/swing/ImageIcon.html
         10. .setIconImage (JFrame): https://stackoverflow.com/questions/15657569/how-to-set-icon-to-jframe
         11. JTabbedPane: https://docs.oracle.com/javase/8/docs/api/javax/swing/JTabbedPane.html
-        12. https://docs.oracle.com/javase/8/docs/api/javax/swing/BorderFactory.html
-        13. https://docs.oracle.com/javase/8/docs/api/javax/swing/Box.html
-        14. https://docs.oracle.com/javase/8/docs/api/java/awt/Component.html
-        15. https://docs.oracle.com/javase/8/docs/api/java/awt/Dimension.html
+        12. BorderFactory: https://docs.oracle.com/javase/8/docs/api/javax/swing/BorderFactory.html
+        13. Box: https://docs.oracle.com/javase/8/docs/api/javax/swing/Box.html
+        14. Component: https://docs.oracle.com/javase/8/docs/api/java/awt/Component.html
+        15. Dimension: https://docs.oracle.com/javase/8/docs/api/java/awt/Dimension.html
+        16. InputSteam: https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html
+        17. SwingConstants: https://docs.oracle.com/javase/8/docs/api/index.html?javax/swing/SwingConstants.html
+        18. ImageIcon: https://docs.oracle.com/javase/8/docs/api/javax/swing/ImageIcon.html
+        19. Cursor: https://docs.oracle.com/javase/8/docs/api/java/awt/Cursor.html
  */
 public class App{
     //Declares static variables for use in the frame
@@ -258,6 +263,7 @@ public class App{
         volumePanel.add(volumeDropdownTwo);
         volumePanel.add(Box.createVerticalStrut(7));
         generateVolume=new JButton("Generate Conversion");
+        generateVolume.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         volumePanel.add(generateVolume);
         generateVolume.setAlignmentX(Component.CENTER_ALIGNMENT);
         generateVolume.addActionListener(buttonHandler);
@@ -276,6 +282,7 @@ public class App{
         lengthPanel.add(lengthDropdownTwo);
         lengthPanel.add(Box.createVerticalStrut(7));
         generateLength=new JButton("Generate Conversion");
+        generateLength.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         generateLength.setAlignmentX(Component.CENTER_ALIGNMENT);
         lengthPanel.add(generateLength);
         generateLength.addActionListener(buttonHandler);
@@ -294,6 +301,7 @@ public class App{
         temperaturePanel.add(temperatureDropdownTwo);
         temperaturePanel.add(Box.createVerticalStrut(7));
         generateTemperature=new JButton("Generate Conversion");
+        generateTemperature.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         generateTemperature.setAlignmentX(Component.CENTER_ALIGNMENT);
         temperaturePanel.add(generateTemperature);
         generateTemperature.addActionListener(buttonHandler);
