@@ -1,5 +1,3 @@
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -41,9 +39,6 @@ import java.awt.BorderLayout;
         8. Locale: https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html
         9. ImageIcon: https://docs.oracle.com/javase/8/docs/api/javax/swing/ImageIcon.html
         10. .setIconImage (JFrame): https://stackoverflow.com/questions/15657569/how-to-set-icon-to-jframe
-        11. LineBorder: https://docs.oracle.com/javase/8/docs/api/javax/swing/border/LineBorder.html
-        12. Box: https://docs.oracle.com/javase/8/docs/api/javax/swing/Box.html
-        13. BoxLayout: https://docs.oracle.com/javase/8/docs/api/javax/swing/BoxLayout.html
  */
 public class App{
     //Declares static variables for use in the frame
@@ -179,7 +174,7 @@ public class App{
         }
     }
     static{
-        //Fetches the custom font for the UI:
+        //Allocates custom font for the UI:
         includeFont("/fonts/NotoSans-Regular.ttf");
         includeFont("/fonts/NotoSans-Bold.ttf");
         includeFont("/fonts/EBGaramond-Regular.ttf");
@@ -195,8 +190,8 @@ public class App{
         UIManager.put("TitledBorder.font", notoSansBold);
         //Sets custom colors for the various components
         UIManager.put("Panel.background", Color.decode("#FFFFFF"));
-        UIManager.put("Button.background", Color.decode("#1C94E9"));
-        UIManager.put("Button.foreground", Color.decode("#FFFFFF"));
+        UIManager.put("Button.background", Color.decode("#DE0000"));
+        UIManager.put("Button.foreground", Color.decode("#FFFFFFF"));
         UIManager.put("TextField.background", Color.decode("#FFFFFF"));
         UIManager.put("TextField.foreground", Color.decode("#000000"));
         UIManager.put("ComboBox.background", Color.decode("#1C94E9"));
@@ -217,7 +212,6 @@ public class App{
         titleLabel.setFont(new Font("Noto Sans", Font.BOLD, 35));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         volumePanel.setBorder(new TitledBorder("Volume"));
-        volumePanel.setLayout(new BoxLayout(volumePanel, BoxLayout.Y_AXIS));
         frame.setTitle("Unit Converter");
         frame.getContentPane().setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -232,45 +226,32 @@ public class App{
         //Initializes the two dropdown boxes for the volume units and appends them to the volume panel
         volumeDropdownOne=new JComboBox<String>(volumeUnits);
         volumeDropdownTwo=new JComboBox<String>(volumeUnits);
-        volumeDropdownOne.setPrototypeDisplayValue("Cubic Centimeter");
-        volumeDropdownTwo.setPrototypeDisplayValue("Cubic Centimeter");
         volumePanel.add(volumeDropdownOne);
-        volumePanel.add(Box.createVerticalStrut(6));
         volumePanel.add(volumeDropdownTwo);
-        volumePanel.add(Box.createVerticalStrut(6));
         //Initializes the generateConversion button for generating the volume conversion box
         JButton generateVolume=new JButton("Generate Conversion");
         volumePanel.add(generateVolume);
         lengthPanel.setBorder(new TitledBorder("Length"));
-        lengthPanel.setLayout(new BoxLayout(lengthPanel, BoxLayout.Y_AXIS));
         //Initializes the two dropdown boxes for the length units and appends them to the length panel
         lengthDropdownOne=new JComboBox<String>(lengthUnits);
         lengthDropdownTwo=new JComboBox<String>(lengthUnits);
-        volumeDropdownOne.setPrototypeDisplayValue("Nautical Mile");
-        volumeDropdownTwo.setPrototypeDisplayValue("Nautical Mile");
         lengthPanel.add(lengthDropdownOne);
-        lengthPanel.add(Box.createVerticalStrut(6));
         lengthPanel.add(lengthDropdownTwo);
-        lengthPanel.add(Box.createVerticalStrut(6));
         //Initializes the generateConversion button for generating the length conversion box
         JButton generateLength=new JButton("Generate Conversion");
         lengthPanel.add(generateLength);
         temperaturePanel.setBorder(new TitledBorder("Temperature"));
-        temperaturePanel.setLayout(new BoxLayout(temperaturePanel, BoxLayout.Y_AXIS));
         //Initializes the two dropdown boxes for the temperature units and appends them to the temperature panel
         temperatureDropdownOne=new JComboBox<String>(temperatureUnits);
         temperatureDropdownTwo=new JComboBox<String>(temperatureUnits);
-        temperatureDropdownOne.setPrototypeDisplayValue("Fahrenheit");
-        temperatureDropdownTwo.setPrototypeDisplayValue("Fahrenheit");
         temperaturePanel.add(temperatureDropdownOne);
-        temperaturePanel.add(Box.createVerticalStrut(6));
         temperaturePanel.add(temperatureDropdownTwo);
-        temperaturePanel.add(Box.createVerticalStrut(6));
         //Initializes the generateConversion button for generating the temperature conversion box
         JButton generateTemperature=new JButton("Generate Conversion");
         temperaturePanel.add(generateTemperature);
         //Sets the ActionListener for the buttons to create the boxes
         ActionListener buttonHandler=new ActionListener(){
+        //    public static void generateConverterBox(JPanel unitPanel, JComboBox<String> selectBoxOne, JComboBox<String> selectBoxTwo, String[] convertingUnits, double[] unitConversionTable, boolean isTemperatureConversion){
             @Override
             public void actionPerformed(ActionEvent event){
                 if (event.getSource().equals(generateVolume)){
