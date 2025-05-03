@@ -16,7 +16,6 @@ import javax.swing.border.TitledBorder;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
@@ -72,12 +71,14 @@ public class App{
             unitPanel.remove(5);
         }
         if (unitOneIndex!=unitTwoIndex){
-            JPanel newConversionBox=new JPanel(new FlowLayout(FlowLayout.CENTER, 6, 3));
+            JPanel newConversionBox=new JPanel();
+            newConversionBox.setLayout(new BoxLayout(newConversionBox, BoxLayout.Y_AXIS));
             newConversionBox.setAlignmentX(Component.CENTER_ALIGNMENT);
             JTextField unitOneField=new JTextField(15);
             JTextField unitTwoField=new JTextField(15);
             newConversionBox.add(new JLabel(convertingUnits[unitOneIndex]));
             newConversionBox.add(unitOneField);
+            newConversionBox.add(Box.createVerticalStrut(15));
             newConversionBox.add(new JLabel(convertingUnits[unitTwoIndex]));
             newConversionBox.add(unitTwoField);
             unitPanel.add(Box.createVerticalStrut(25));
@@ -171,9 +172,9 @@ public class App{
         }
         return inputValue;
     }
-    //Formats all double numbers (returns as a String) to three decimal places (the meaning of %.3f)
+    //Formats all double numbers (returns as a String) to five decimal places (the meaning of %.5f)
     public static String formatDoubleValues(double number){
-        return String.format("%.3f", number);
+        return String.format("%.5f", number);
     }
     //Function to fetch font from the local path and include it in the program
     public static void includeFont(String fontPath){
