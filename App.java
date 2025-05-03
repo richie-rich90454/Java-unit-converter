@@ -1,3 +1,6 @@
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -11,6 +14,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
@@ -40,6 +44,9 @@ import java.awt.BorderLayout;
         9. ImageIcon: https://docs.oracle.com/javase/8/docs/api/javax/swing/ImageIcon.html
         10. .setIconImage (JFrame): https://stackoverflow.com/questions/15657569/how-to-set-icon-to-jframe
         11. JTabbedPane: https://docs.oracle.com/javase/8/docs/api/javax/swing/JTabbedPane.html
+        12. https://docs.oracle.com/javase/8/docs/api/javax/swing/BorderFactory.html
+        13. https://docs.oracle.com/javase/8/docs/api/javax/swing/Box.html
+        14. https://docs.oracle.com/javase/8/docs/api/java/awt/Component.html
  */
 public class App{
     //Declares static variables for use in the frame
@@ -59,17 +66,19 @@ public class App{
             JOptionPane.showMessageDialog(null, "Please select two distinct units for conversion between them.");
             return;
         }
-        while (unitPanel.getComponentCount()>3){
-            unitPanel.remove(3);
+        while (unitPanel.getComponentCount()>5){
+            unitPanel.remove(5);
         }
         if (unitOneIndex!=unitTwoIndex){
-            JPanel newConversionBox=new JPanel();
+            JPanel newConversionBox=new JPanel(new FlowLayout(FlowLayout.CENTER, 6, 3));
+            newConversionBox.setAlignmentX(Component.CENTER_ALIGNMENT);
             JTextField unitOneField=new JTextField(15);
             JTextField unitTwoField=new JTextField(15);
             newConversionBox.add(new JLabel(convertingUnits[unitOneIndex]));
             newConversionBox.add(unitOneField);
             newConversionBox.add(new JLabel(convertingUnits[unitTwoIndex]));
             newConversionBox.add(unitTwoField);
+            unitPanel.add(Box.createVerticalStrut(25));
             unitPanel.add(newConversionBox);
             unitPanel.revalidate();
             unitPanel.repaint();
@@ -197,6 +206,7 @@ public class App{
         UIManager.put("TextField.foreground", Color.decode("#000000"));
         UIManager.put("ComboBox.background", Color.decode("#1C94E9"));
         UIManager.put("ComboBox.foreground", Color.decode("#FFFFFF"));
+        UIManager.put("TabbedPane.font", notoSansBold);
     }
     public static void main(String[] args) throws Exception{
         //Sets Program Language to English
@@ -211,7 +221,8 @@ public class App{
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         titleLabel.setForeground(Color.decode("#1C94E9"));
         volumePanel.setBorder(new TitledBorder("Volume"));
-        volumePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        volumePanel.setLayout(new BoxLayout(volumePanel, BoxLayout.Y_AXIS));
+        volumePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         frame.setTitle("Unit Converter");
         frame.getContentPane().setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -225,31 +236,48 @@ public class App{
         }
         //Initializes the two dropdown boxes for the volume units and appends them to the volume panel
         volumeDropdownOne=new JComboBox<String>(volumeUnits);
+        volumeDropdownOne.setAlignmentX(Component.CENTER_ALIGNMENT);
         volumeDropdownTwo=new JComboBox<String>(volumeUnits);
+        volumeDropdownTwo.setAlignmentX(Component.CENTER_ALIGNMENT);
         volumePanel.add(volumeDropdownOne);
+        volumePanel.add(Box.createVerticalStrut(7));
         volumePanel.add(volumeDropdownTwo);
+        volumePanel.add(Box.createVerticalStrut(7));
         //Initializes the generateConversion button for generating the volume conversion box
         JButton generateVolume=new JButton("Generate Conversion");
         volumePanel.add(generateVolume);
+        generateVolume.setAlignmentX(Component.CENTER_ALIGNMENT);
         lengthPanel.setBorder(new TitledBorder("Length"));
-        lengthPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        lengthPanel.setLayout(new BoxLayout(lengthPanel, BoxLayout.Y_AXIS));
+        lengthPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         //Initializes the two dropdown boxes for the length units and appends them to the length panel
         lengthDropdownOne=new JComboBox<String>(lengthUnits);
+        lengthDropdownOne.setAlignmentX(Component.CENTER_ALIGNMENT);
         lengthDropdownTwo=new JComboBox<String>(lengthUnits);
+        lengthDropdownTwo.setAlignmentX(Component.CENTER_ALIGNMENT);
         lengthPanel.add(lengthDropdownOne);
+        lengthPanel.add(Box.createVerticalStrut(7));
         lengthPanel.add(lengthDropdownTwo);
+        lengthPanel.add(Box.createVerticalStrut(7));
         //Initializes the generateConversion button for generating the length conversion box
         JButton generateLength=new JButton("Generate Conversion");
         lengthPanel.add(generateLength);
+        generateLength.setAlignmentX(Component.CENTER_ALIGNMENT);
         temperaturePanel.setBorder(new TitledBorder("Temperature"));
-        temperaturePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        temperaturePanel.setLayout(new BoxLayout(temperaturePanel, BoxLayout.Y_AXIS));
+        temperaturePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         //Initializes the two dropdown boxes for the temperature units and appends them to the temperature panel
         temperatureDropdownOne=new JComboBox<String>(temperatureUnits);
+        temperatureDropdownOne.setAlignmentX(Component.CENTER_ALIGNMENT);
         temperatureDropdownTwo=new JComboBox<String>(temperatureUnits);
+        temperatureDropdownTwo.setAlignmentX(Component.CENTER_ALIGNMENT);
         temperaturePanel.add(temperatureDropdownOne);
+        temperaturePanel.add(Box.createVerticalStrut(7));
         temperaturePanel.add(temperatureDropdownTwo);
+        temperaturePanel.add(Box.createVerticalStrut(7));
         //Initializes the generateConversion button for generating the temperature conversion box
         JButton generateTemperature=new JButton("Generate Conversion");
+        generateTemperature.setAlignmentX(Component.CENTER_ALIGNMENT);
         temperaturePanel.add(generateTemperature);
         //Sets the ActionListener for the buttons to create the boxes
         ActionListener buttonHandler=new ActionListener(){
@@ -271,7 +299,8 @@ public class App{
         generateLength.addActionListener(buttonHandler);
         generateTemperature.addActionListener(buttonHandler);
         JTabbedPane tabPanes=new JTabbedPane();
-        tabPanes.setBackground(Color.decode("#F0F0F0"));
+        tabPanes.setForeground(Color.decode("#1C94E9"));
+        tabPanes.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.decode("#1C94E9"), 2), BorderFactory.createEmptyBorder(7, 7, 7, 7)));
         tabPanes.addTab("Volume", volumePanel);
         tabPanes.addTab("Length", lengthPanel);
         tabPanes.addTab("Temperature", temperaturePanel);
@@ -279,7 +308,7 @@ public class App{
         //Appends everything to the frame
         frame.add(titleLabel, BorderLayout.PAGE_START);
         frame.add(mainPanel);
-        frame.setSize(1536, 768);
+        frame.setSize(800, 600);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
