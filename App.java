@@ -8,9 +8,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
@@ -25,7 +25,7 @@ import java.awt.BorderLayout;
 /*
     Program: Java Unit Converter
     Programmer: Richard
-    Date: 2025/5/2
+    Date: 2025/5/3
  */
 /*
     References:
@@ -191,13 +191,11 @@ public class App{
         //Sets custom colors for the various components
         UIManager.put("Panel.background", Color.decode("#FFFFFF"));
         UIManager.put("Button.background", Color.decode("#DE0000"));
-        UIManager.put("Button.foreground", Color.decode("#FFFFFFF"));
+        UIManager.put("Button.foreground", Color.decode("#FFFFFF"));
         UIManager.put("TextField.background", Color.decode("#FFFFFF"));
         UIManager.put("TextField.foreground", Color.decode("#000000"));
         UIManager.put("ComboBox.background", Color.decode("#1C94E9"));
         UIManager.put("ComboBox.foreground", Color.decode("#FFFFFF"));
-        UIManager.put("Button.border", new LineBorder(Color.decode("#DE0000"), 1, true));
-        UIManager.put("ComboBox.border", new LineBorder(Color.decode("#DE0000"), 1, true));
     }
     public static void main(String[] args) throws Exception{
         //Sets Program Language to English
@@ -211,7 +209,9 @@ public class App{
         JLabel titleLabel=new JLabel("Unit Converter");
         titleLabel.setFont(new Font("Noto Sans", Font.BOLD, 35));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setForeground(Color.decode("#1C94E9"));
         volumePanel.setBorder(new TitledBorder("Volume"));
+        volumePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         frame.setTitle("Unit Converter");
         frame.getContentPane().setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -232,6 +232,7 @@ public class App{
         JButton generateVolume=new JButton("Generate Conversion");
         volumePanel.add(generateVolume);
         lengthPanel.setBorder(new TitledBorder("Length"));
+        lengthPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         //Initializes the two dropdown boxes for the length units and appends them to the length panel
         lengthDropdownOne=new JComboBox<String>(lengthUnits);
         lengthDropdownTwo=new JComboBox<String>(lengthUnits);
@@ -241,6 +242,7 @@ public class App{
         JButton generateLength=new JButton("Generate Conversion");
         lengthPanel.add(generateLength);
         temperaturePanel.setBorder(new TitledBorder("Temperature"));
+        temperaturePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         //Initializes the two dropdown boxes for the temperature units and appends them to the temperature panel
         temperatureDropdownOne=new JComboBox<String>(temperatureUnits);
         temperatureDropdownTwo=new JComboBox<String>(temperatureUnits);
