@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -13,7 +14,6 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -39,6 +39,7 @@ import java.awt.BorderLayout;
         8. Locale: https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html
         9. ImageIcon: https://docs.oracle.com/javase/8/docs/api/javax/swing/ImageIcon.html
         10. .setIconImage (JFrame): https://stackoverflow.com/questions/15657569/how-to-set-icon-to-jframe
+        11. JTabbedPane: https://docs.oracle.com/javase/8/docs/api/javax/swing/JTabbedPane.html
  */
 public class App{
     //Declares static variables for use in the frame
@@ -200,7 +201,6 @@ public class App{
     public static void main(String[] args) throws Exception{
         //Sets Program Language to English
         Locale.setDefault(Locale.ENGLISH);
-        //Initializes basic components such as the frame, various panels for conversion, and does some styling on them by setting the font, font size, title, and text alignment; additional basic initiation is set by setting the frame title, setting it to use border layout and the main panel to use grid layout and other panels to use border layout, and setting the default close operation of ending the program
         JFrame frame=new JFrame();
         volumePanel=new JPanel();
         lengthPanel=new JPanel();
@@ -270,11 +270,12 @@ public class App{
         generateVolume.addActionListener(buttonHandler);
         generateLength.addActionListener(buttonHandler);
         generateTemperature.addActionListener(buttonHandler);
-        //Configures the grid layout for the main panel and appends the other panels
-        mainPanel.setLayout(new GridLayout(1,3,1,1));
-        mainPanel.add(volumePanel);
-        mainPanel.add(lengthPanel);
-        mainPanel.add(temperaturePanel);
+        JTabbedPane tabPanes=new JTabbedPane();
+        tabPanes.setBackground(Color.decode("#F0F0F0"));
+        tabPanes.addTab("Volume", volumePanel);
+        tabPanes.addTab("Length", lengthPanel);
+        tabPanes.addTab("Temperature", temperaturePanel);
+        mainPanel.add(tabPanes, BorderLayout.CENTER);
         //Appends everything to the frame
         frame.add(titleLabel, BorderLayout.PAGE_START);
         frame.add(mainPanel);
