@@ -169,8 +169,8 @@ public class App{
             System.err.println("Failed to load font "+fontPath+": "+exception);
         }
     }
-    //Allocates custom font for the UI:
     static{
+        //Allocates custom font for the UI:
         includeFont("/fonts/NotoSans-Regular.ttf");
         includeFont("/fonts/NotoSans-Bold.ttf");
         includeFont("/fonts/EBGaramond-Regular.ttf");
