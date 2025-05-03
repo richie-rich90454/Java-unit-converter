@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
+import javax.swing.plaf.BorderUIResource;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -53,6 +54,7 @@ import java.awt.BorderLayout;
         17. SwingConstants: https://docs.oracle.com/javase/8/docs/api/index.html?javax/swing/SwingConstants.html
         18. ImageIcon: https://docs.oracle.com/javase/8/docs/api/javax/swing/ImageIcon.html
         19. Cursor: https://docs.oracle.com/javase/8/docs/api/java/awt/Cursor.html
+        20. BorderUIResource: https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/javax/swing/plaf/BorderUIResource.html
  */
 public class App{
     //Declares static variables for use in the frame
@@ -226,7 +228,7 @@ public class App{
         UIManager.put("ToolTip.font", ebGaramond);
         UIManager.put("ToolTip.background", Color.decode("#FADE54"));
         UIManager.put("ToolTip.foreground", Color.decode("#000000"));
-        UIManager.put("ToolTip.opaque", false);
+        UIManager.put("ToolTip.border", new BorderUIResource.LineBorderUIResource(Color.decode("#000000"), 1));
     }
     public static ActionListener buttonHandler=new ActionListener(){
         @Override
