@@ -81,7 +81,9 @@ public class App{
             newConversionBox.setLayout(new BoxLayout(newConversionBox, BoxLayout.Y_AXIS));
             newConversionBox.setAlignmentX(Component.CENTER_ALIGNMENT);
             JTextField unitOneField=new JTextField(15);
+            unitOneField.setToolTipText("Input your value for unit "+convertingUnits[unitOneIndex]+" here");
             JTextField unitTwoField=new JTextField(15);
+            unitTwoField.setToolTipText("Input your value for unit "+convertingUnits[unitTwoIndex]+" here");
             JLabel unitOneLabel=new JLabel(convertingUnits[unitOneIndex]);
             unitOneLabel.setFont(new Font("EB Garamond", Font.PLAIN, 17));
             unitOneLabel.setForeground(Color.decode("#1C94E9"));
@@ -256,8 +258,10 @@ public class App{
         volumePanel.setPreferredSize(new Dimension(600, 400));
         volumeDropdownOne=new JComboBox<String>(volumeUnits);
         volumeDropdownOne.setAlignmentX(Component.CENTER_ALIGNMENT);
+        volumeDropdownOne.setToolTipText("Select a volume unit");
         volumeDropdownTwo=new JComboBox<String>(volumeUnits);
         volumeDropdownTwo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        volumeDropdownTwo.setToolTipText("Select a volume unit");
         volumePanel.add(volumeDropdownOne);
         volumePanel.add(Box.createVerticalStrut(7));
         volumePanel.add(volumeDropdownTwo);
@@ -266,6 +270,7 @@ public class App{
         generateVolume.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         volumePanel.add(generateVolume);
         generateVolume.setAlignmentX(Component.CENTER_ALIGNMENT);
+        generateVolume.setToolTipText("Generate the volume conversion box");
         generateVolume.addActionListener(buttonHandler);
     }
     public static void configureLengthPanel(JPanel lengthPanel){
@@ -275,8 +280,10 @@ public class App{
         lengthPanel.setPreferredSize(new Dimension(600, 400));
         lengthDropdownOne=new JComboBox<String>(lengthUnits);
         lengthDropdownOne.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lengthDropdownOne.setToolTipText("Select a length unit");
         lengthDropdownTwo=new JComboBox<String>(lengthUnits);
         lengthDropdownTwo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lengthDropdownTwo.setToolTipText("Select a length unit");
         lengthPanel.add(lengthDropdownOne);
         lengthPanel.add(Box.createVerticalStrut(7));
         lengthPanel.add(lengthDropdownTwo);
@@ -285,6 +292,7 @@ public class App{
         generateLength.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         generateLength.setAlignmentX(Component.CENTER_ALIGNMENT);
         lengthPanel.add(generateLength);
+        generateLength.setToolTipText("Generate the length conversion box");
         generateLength.addActionListener(buttonHandler);
     }
     public static void configureTemperaturePanel(JPanel temperaturePanel){
@@ -294,8 +302,10 @@ public class App{
         temperaturePanel.setPreferredSize(new Dimension(600, 400));
         temperatureDropdownOne=new JComboBox<String>(temperatureUnits);
         temperatureDropdownOne.setAlignmentX(Component.CENTER_ALIGNMENT);
+        temperatureDropdownOne.setToolTipText("Select a temperature unit");
         temperatureDropdownTwo=new JComboBox<String>(temperatureUnits);
         temperatureDropdownTwo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        temperatureDropdownTwo.setToolTipText("Select a temperature unit");
         temperaturePanel.add(temperatureDropdownOne);
         temperaturePanel.add(Box.createVerticalStrut(7));
         temperaturePanel.add(temperatureDropdownTwo);
@@ -304,6 +314,7 @@ public class App{
         generateTemperature.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         generateTemperature.setAlignmentX(Component.CENTER_ALIGNMENT);
         temperaturePanel.add(generateTemperature);
+        generateTemperature.setToolTipText("Generate the temperature conversion box");
         generateTemperature.addActionListener(buttonHandler);
     }
     public static void configuretabPanes(JTabbedPane tabPanes){
