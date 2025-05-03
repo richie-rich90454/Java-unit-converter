@@ -224,8 +224,9 @@ public class App{
         UIManager.put("ComboBox.foreground", Color.decode("#FFFFFF"));
         UIManager.put("TabbedPane.font", notoSansBold);
         UIManager.put("ToolTip.font", ebGaramond);
-        UIManager.put("ToolTip.background", "#1C94E9");
-        UIManager.put("ToolTip.foreground", "#FFFFFF");
+        UIManager.put("ToolTip.background", Color.decode("#FADE54"));
+        UIManager.put("ToolTip.foreground", Color.decode("#000000"));
+        UIManager.put("ToolTip.opaque", false);
     }
     public static ActionListener buttonHandler=new ActionListener(){
         @Override
