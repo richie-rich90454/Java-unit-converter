@@ -15,6 +15,7 @@ import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
@@ -299,17 +300,21 @@ public class App{
         generateLength.addActionListener(buttonHandler);
         generateTemperature.addActionListener(buttonHandler);
         JTabbedPane tabPanes=new JTabbedPane();
+        tabPanes.setSize(new Dimension(600, 0));
         tabPanes.setForeground(Color.decode("#1C94E9"));
         tabPanes.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.decode("#1C94E9"), 2), BorderFactory.createEmptyBorder(7, 7, 7, 7)));
         tabPanes.addTab("Volume", volumePanel);
         tabPanes.addTab("Length", lengthPanel);
         tabPanes.addTab("Temperature", temperaturePanel);
+        mainPanel.setSize(new Dimension(600, 0));
         mainPanel.add(tabPanes, BorderLayout.CENTER);
         //Appends everything to the frame
         frame.add(titleLabel, BorderLayout.PAGE_START);
         frame.add(mainPanel);
-        frame.setSize(800, 600);
+        frame.pack();
+        frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);
+        frame.setResizable(true);
         frame.setVisible(true);
     }
 }
