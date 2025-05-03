@@ -77,12 +77,18 @@ public class App{
             newConversionBox.setAlignmentX(Component.CENTER_ALIGNMENT);
             JTextField unitOneField=new JTextField(15);
             JTextField unitTwoField=new JTextField(15);
-            newConversionBox.add(new JLabel(convertingUnits[unitOneIndex]));
+            JLabel unitOneLabel=new JLabel(convertingUnits[unitOneIndex]);
+            unitOneLabel.setFont(new Font("EB Garamond", Font.PLAIN, 17));
+            unitOneLabel.setForeground(Color.decode("#1C94E9"));
+            newConversionBox.add(unitOneLabel);
             newConversionBox.add(unitOneField);
             newConversionBox.add(Box.createVerticalStrut(15));
-            newConversionBox.add(new JLabel(convertingUnits[unitTwoIndex]));
+            JLabel unitTwoLabel=new JLabel(convertingUnits[unitTwoIndex]);
+            unitTwoLabel.setFont(new Font("EB Garamond", Font.PLAIN, 17));
+            unitTwoLabel.setForeground(Color.decode("#1C94E9"));
+            newConversionBox.add(unitTwoLabel);
             newConversionBox.add(unitTwoField);
-            unitPanel.add(Box.createVerticalStrut(25));
+            unitPanel.add(Box.createVerticalStrut(20));
             unitPanel.add(newConversionBox);
             unitPanel.revalidate();
             unitPanel.repaint();
@@ -130,7 +136,6 @@ public class App{
                                 isValidNumber=false;
                                 break;
                             }
-    
                         }
                         if (!isValidNumber||numberInput.length()==0||numberInput.equals("-")||numberInput.equals(".")){
                             writeField.setText("");
