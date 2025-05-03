@@ -1,3 +1,4 @@
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -35,6 +36,8 @@ import java.awt.BorderLayout;
         6. GraphicsEnvironment: https://docs.oracle.com/javase/8/docs/api/java/awt/GraphicsEnvironment.html
         7. Try/Catch: https://www.w3schools.com/java/java_try_catch.asp, https://www.geeksforgeeks.org/try-catch-throw-and-throws-in-java/
         8. Locale: https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html
+        9. ImageIcon: https://docs.oracle.com/javase/8/docs/api/javax/swing/ImageIcon.html
+        10. .setIconImage (JFrame): https://stackoverflow.com/questions/15657569/how-to-set-icon-to-jframe
  */
 public class App{
     //Declares static variables for use in the frame
@@ -205,6 +208,14 @@ public class App{
         frame.setTitle("Unit Converter");
         frame.getContentPane().setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //Adds favicon for the window
+        try{
+            ImageIcon favicon=new ImageIcon(App.class.getResource("/favicon.png"));
+            frame.setIconImage(favicon.getImage());
+        }
+        catch (Exception exception){
+            System.err.println("Failed to fetch favicon.");
+        }
         //Initializes the two dropdown boxes for the volume units and appends them to the volume panel
         volumeDropdownOne=new JComboBox<String>(volumeUnits);
         volumeDropdownTwo=new JComboBox<String>(volumeUnits);
