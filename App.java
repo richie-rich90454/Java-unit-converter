@@ -48,6 +48,7 @@ import java.awt.BorderLayout;
         12. https://docs.oracle.com/javase/8/docs/api/javax/swing/BorderFactory.html
         13. https://docs.oracle.com/javase/8/docs/api/javax/swing/Box.html
         14. https://docs.oracle.com/javase/8/docs/api/java/awt/Component.html
+        15. https://docs.oracle.com/javase/8/docs/api/java/awt/Dimension.html
  */
 public class App{
     //Declares static variables for use in the frame
@@ -224,6 +225,7 @@ public class App{
         volumePanel.setBorder(new TitledBorder("Volume"));
         volumePanel.setLayout(new BoxLayout(volumePanel, BoxLayout.Y_AXIS));
         volumePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        volumePanel.setPreferredSize(new Dimension(600, 400));
         frame.setTitle("Unit Converter");
         frame.getContentPane().setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -251,6 +253,7 @@ public class App{
         lengthPanel.setBorder(new TitledBorder("Length"));
         lengthPanel.setLayout(new BoxLayout(lengthPanel, BoxLayout.Y_AXIS));
         lengthPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lengthPanel.setPreferredSize(new Dimension(600, 400));
         //Initializes the two dropdown boxes for the length units and appends them to the length panel
         lengthDropdownOne=new JComboBox<String>(lengthUnits);
         lengthDropdownOne.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -267,6 +270,7 @@ public class App{
         temperaturePanel.setBorder(new TitledBorder("Temperature"));
         temperaturePanel.setLayout(new BoxLayout(temperaturePanel, BoxLayout.Y_AXIS));
         temperaturePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        temperaturePanel.setPreferredSize(new Dimension(600, 400));
         //Initializes the two dropdown boxes for the temperature units and appends them to the temperature panel
         temperatureDropdownOne=new JComboBox<String>(temperatureUnits);
         temperatureDropdownOne.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -312,7 +316,7 @@ public class App{
         frame.add(titleLabel, BorderLayout.PAGE_START);
         frame.add(mainPanel);
         frame.pack();
-        frame.setSize(600, 400);
+        frame.setSize(800, 600);
         frame.setLocationRelativeTo(null);
         frame.setResizable(true);
         frame.setVisible(true);
