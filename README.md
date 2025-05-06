@@ -57,7 +57,7 @@ Convert between 3 temperature units:
      │   ├── NotoSans-Regular.ttf
      │   ├── NotoSans-Bold.ttf
      │   └── EBGaramond-Regular.ttf
-     └── licenses/
+     └── font_licenses/
          ├── OFL-Noto_Sans.txt
          └── OFL-EB_Garamond.txt
      ```
