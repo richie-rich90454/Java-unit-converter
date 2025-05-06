@@ -1,7 +1,12 @@
 # Java Unit Converter
 A Java Swing application for converting between volume, length, and temperature units with real-time calculations.
-![Screenshot](screenshot.png) <!-- Add actual screenshot if available -->
-<!-- screenshot.png would be added later after full completion of the program-->
+## Demo and Interface:
+- ![image_one](demo/image_one.png)
+- ![image_two](demo/image_two.png)
+- ![image_three](demo/image_three.png)
+- ![image_four](demo/image_four.png)
+- ![image_five](demo/image_five.png)
+- ![image_six](demo/image_six.png)
 ## Features
 ### 1. Volume Conversion
 Convert between 13 volume units:
