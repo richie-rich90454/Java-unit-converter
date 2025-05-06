@@ -32,7 +32,7 @@ import java.awt.BorderLayout;
     Program: Java Unit Converter
     Programmer: Richard
     Date: 2025/5/4
- */
+*/
 /*
     References:
         1. JOptionPane: https://www.geeksforgeeks.org/java-joptionpane/
@@ -55,6 +55,7 @@ import java.awt.BorderLayout;
         18. ImageIcon: https://docs.oracle.com/javase/8/docs/api/javax/swing/ImageIcon.html
         19. Cursor: https://docs.oracle.com/javase/8/docs/api/java/awt/Cursor.html
         20. BorderUIResource: https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/javax/swing/plaf/BorderUIResource.html
+        21. HTML in JLabel: https://stackoverflow.com/questions/6635730/how-do-i-put-html-in-a-jlabel-in-java
  */
 public class App{
     //Declares static variables for use in the frame
@@ -75,8 +76,8 @@ public class App{
             JOptionPane.showMessageDialog(null, "Please select two distinct units for conversion between them.");
             return;
         }
-        while (unitPanel.getComponentCount()>5){
-            unitPanel.remove(5);
+        while (unitPanel.getComponentCount()>7){
+            unitPanel.remove(7);
         }
         if (unitOneIndex!=unitTwoIndex){
             JPanel newConversionBox=new JPanel();
@@ -167,6 +168,18 @@ public class App{
         }
     }
     public static double convertTemperature(double inputValue, int inputIndex, int writeIndex){
+        //Input handle part:
+        //Handles out of range values (<0K temperatures, as 0K is absolute zero; temperatures could not be lower than that)
+        if (inputIndex==0&&inputValue<-459.67){
+            inputValue=-459.67;
+        }
+        if (inputIndex==1&&inputValue<-273.15){
+            inputValue=-273.15;
+        }
+        if (inputIndex==2&&inputValue<0){
+            inputValue=0;
+        }
+        //Conversion part
         if (inputIndex==0&&writeIndex==1){
             return (inputValue-32.0)*(5.0/9.0);
         }
@@ -224,6 +237,7 @@ public class App{
         UIManager.put("TextField.foreground", Color.decode("#000000"));
         UIManager.put("ComboBox.background", Color.decode("#1C94E9"));
         UIManager.put("ComboBox.foreground", Color.decode("#FFFFFF"));
+        UIManager.put("Label.foreground", Color.decode("#1C94E9"));
         UIManager.put("TabbedPane.font", notoSansBold);
         UIManager.put("ToolTip.font", ebGaramond);
         UIManager.put("ToolTip.background", Color.decode("#FADE54"));
@@ -258,6 +272,8 @@ public class App{
         }
     }
     public static void configureVolumePanel(JPanel volumePanel){
+        JLabel noticeLabelForNegativeSign=new JLabel("<html><center>Note: Any \"-\" entered with no trailing number would be treated as -1.</center></html>");
+        noticeLabelForNegativeSign.setAlignmentX(Component.CENTER_ALIGNMENT);
         volumePanel.setBorder(new TitledBorder("Volume"));
         volumePanel.setLayout(new BoxLayout(volumePanel, BoxLayout.Y_AXIS));
         volumePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -272,6 +288,8 @@ public class App{
         volumePanel.add(Box.createVerticalStrut(7));
         volumePanel.add(volumeDropdownTwo);
         volumePanel.add(Box.createVerticalStrut(7));
+        volumePanel.add(noticeLabelForNegativeSign);
+        volumePanel.add(Box.createVerticalStrut(7));
         generateVolume=new JButton("Generate Conversion");
         generateVolume.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         volumePanel.add(generateVolume);
@@ -280,6 +298,8 @@ public class App{
         generateVolume.addActionListener(buttonHandler);
     }
     public static void configureLengthPanel(JPanel lengthPanel){
+        JLabel noticeLabelForNegativeSign=new JLabel("<html><center>Note: Any \"-\" entered with no trailing number would be treated as -1.</center></html>");
+        noticeLabelForNegativeSign.setAlignmentX(Component.CENTER_ALIGNMENT);
         lengthPanel.setBorder(new TitledBorder("Length"));
         lengthPanel.setLayout(new BoxLayout(lengthPanel, BoxLayout.Y_AXIS));
         lengthPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -294,6 +314,8 @@ public class App{
         lengthPanel.add(Box.createVerticalStrut(7));
         lengthPanel.add(lengthDropdownTwo);
         lengthPanel.add(Box.createVerticalStrut(7));
+        lengthPanel.add(noticeLabelForNegativeSign);
+        lengthPanel.add(Box.createVerticalStrut(7));
         generateLength=new JButton("Generate Conversion");
         generateLength.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         generateLength.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -302,6 +324,8 @@ public class App{
         generateLength.addActionListener(buttonHandler);
     }
     public static void configureTemperaturePanel(JPanel temperaturePanel){
+        JLabel noticeLabelForAbsoluteZero=new JLabel("<html><center>Note: Any values for temperature below absolute 0 (-459.67 Degrees Fahrenheit, -273.15 Degrees Celsius, or 0 Kelvin) would be taken as their respective absolute 0 values. Any \\\"-\\\" entered with no trailing number would be treated as -1.</center></html>");
+        noticeLabelForAbsoluteZero.setAlignmentX(Component.CENTER_ALIGNMENT);
         temperaturePanel.setBorder(new TitledBorder("Temperature"));
         temperaturePanel.setLayout(new BoxLayout(temperaturePanel, BoxLayout.Y_AXIS));
         temperaturePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -315,6 +339,8 @@ public class App{
         temperaturePanel.add(temperatureDropdownOne);
         temperaturePanel.add(Box.createVerticalStrut(7));
         temperaturePanel.add(temperatureDropdownTwo);
+        temperaturePanel.add(Box.createVerticalStrut(7));
+        temperaturePanel.add(noticeLabelForAbsoluteZero);
         temperaturePanel.add(Box.createVerticalStrut(7));
         generateTemperature=new JButton("Generate Conversion");
         generateTemperature.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
