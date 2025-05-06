@@ -341,7 +341,7 @@ public class App{
         JPanel mainPanel=new JPanel();
         JLabel titleLabel=new JLabel("Unit Converter");
         JTabbedPane tabPanes=new JTabbedPane();
-        titleLabel.setFont(new Font("Noto Sans", Font.BOLD, 35));
+        titleLabel.setFont(new Font("Noto Sans", Font.BOLD, 60));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         titleLabel.setForeground(Color.decode("#1C94E9"));
         configureVolumePanel(volumePanel);
