@@ -87,11 +87,11 @@ This application uses the following fonts under the [SIL Open Font License (OFL)
 ### EB Garamond
 * **Author**: Georg Duffner
 * **Source**: [https://github.com/octaviopardo/EBGaramond12](https://github.com/octaviopardo/EBGaramond12)
-* **License**: `font_licenses/OFL-EB_Garamond.txt`
+* **License**: [font_licenses/OFL-EB_Garamond.txt](font_licenses/OFL-EB_Garamond.txt)
 ### Noto Sans
 * **Author**: Google Inc.
 * **Source**: [https://github.com/notofonts/latin-greek-cyrillic](https://github.com/notofonts/latin-greek-cyrillic)
-* **License**: `font_licenses/OFL-Noto_Sans.txt`
+* **License**: [font_licenses/OFL-Noto_Sans.txt](font_licenses/OFL-Noto_Sans.txt)
 ## License Compliance
 This project complies with the Apache License 2.0 and SIL OFL requirements by:
 1. Including original font files without modification.
