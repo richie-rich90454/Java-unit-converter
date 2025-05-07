@@ -204,8 +204,9 @@ public class App{
     public static String formatDoubleValues(double number){
         return String.format("%.5f", number);
     }
-    //Function to fetch font from the local path and include it in the program
+    //Method to fetch font from the local path and include it in the program
     public static void includeFont(String fontPath){
+        //uses the getResrouceAsStream method to obtain the font file and create a font with the file
         try (InputStream fontFile=App.class.getResourceAsStream(fontPath)){
             Font newFont=Font.createFont(Font.TRUETYPE_FONT, fontFile);
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(newFont);
@@ -215,10 +216,11 @@ public class App{
         }
     }
     static{
-        //Allocates custom font for the UI:
+        //Allocates custom font for the UI (adds Noto Sans Regular, Noto Sans Bold, and EB Garamond Regular font truetype fonts):
         includeFont("/fonts/NotoSans-Regular.ttf");
         includeFont("/fonts/NotoSans-Bold.ttf");
         includeFont("/fonts/EBGaramond-Regular.ttf");
+        //Configures a few font objects for easier global assignments (prevent the repeated use of new Font() in the UIManager settings below)
         Font notoSans=new Font("Noto Sans", Font.PLAIN, 14);
         Font notoSansBold=new Font("Noto Sans", Font.BOLD, 14);
         Font ebGaramond=new Font("EB Garamond", Font.PLAIN, 16);
@@ -229,7 +231,9 @@ public class App{
         UIManager.put("ComboBox.font", ebGaramond);
         UIManager.put("OptionPane.messageFont", ebGaramond);
         UIManager.put("TitledBorder.font", notoSansBold);
-        //Sets custom colors for the various components
+        UIManager.put("TabbedPane.font", notoSansBold);
+        UIManager.put("ToolTip.font", ebGaramond);
+        //Sets custom colors for the various components (foreground==text color and background==background color)
         UIManager.put("Panel.background", Color.decode("#FFFFFF"));
         UIManager.put("Button.background", Color.decode("#DE0000"));
         UIManager.put("Button.foreground", Color.decode("#FFFFFF"));
@@ -238,15 +242,16 @@ public class App{
         UIManager.put("ComboBox.background", Color.decode("#1C94E9"));
         UIManager.put("ComboBox.foreground", Color.decode("#FFFFFF"));
         UIManager.put("Label.foreground", Color.decode("#1C94E9"));
-        UIManager.put("TabbedPane.font", notoSansBold);
-        UIManager.put("ToolTip.font", ebGaramond);
         UIManager.put("ToolTip.background", Color.decode("#FADE54"));
         UIManager.put("ToolTip.foreground", Color.decode("#000000"));
+        //Sets border for the tooltip to black to make it visible
         UIManager.put("ToolTip.border", new BorderUIResource.LineBorderUIResource(Color.decode("#000000"), 1));
     }
+    //Action listener for the generateX buttons
     public static ActionListener buttonHandler=new ActionListener(){
         @Override
         public void actionPerformed(ActionEvent event){
+            //Calls the generateConverterBox method with relevant parameters
             if (event.getSource().equals(generateVolume)){
                 generateConverterBox(volumePanel, volumeDropdownOne, volumeDropdownTwo, volumeUnits, conversionTableForVolume, false);
             }
@@ -254,15 +259,17 @@ public class App{
                 generateConverterBox(lengthPanel, lengthDropdownOne, lengthDropdownTwo, lengthUnits, conversionTableForLength, false);
             }
             else if (event.getSource().equals(generateTemperature)){
+                //Special case: since it is impossible (unneccesarily complicated for this case) to make a conversion table for temperature (Fahrenheit is in formula form with a variable and a constant), the unitConversionTable is set to null and the specific parameter for the method to detect if it is a temperature conversion is set to true for handling in the generateConverterBox method
                 generateConverterBox(temperaturePanel, temperatureDropdownOne, temperatureDropdownTwo, temperatureUnits, null, true);
             }
         }
     };
     public static void configureMainFrame(JFrame frame) throws Exception{
+        //Configures the frame's title; configures it to stop the program on closing the window; configures the layout to BorderLayout()
         frame.setTitle("Unit Converter");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(new BorderLayout());
-        //Adds favicon for the window
+        //Adds favicon for the window; uses try catch for error handling and preventing an error that stops the program if the favicon fails to load
         try{
             ImageIcon favicon=new ImageIcon(App.class.getResource("/favicon.png"));
             frame.setIconImage(favicon.getImage());
@@ -360,6 +367,7 @@ public class App{
     public static void main(String[] args) throws Exception{
         //Sets Program Language to English
         Locale.setDefault(Locale.ENGLISH);
+        //Intializes the various frames and panels that contain the user interface
         JFrame frame=new JFrame();
         volumePanel=new JPanel();
         lengthPanel=new JPanel();
