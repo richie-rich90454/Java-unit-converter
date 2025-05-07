@@ -69,13 +69,17 @@ public class App{
     public static final String[] volumeUnits={"Gallon", "U.S. Cup", "Tablespoon", "Teaspoon", "Cubic Feet", "Cubic Yard", "Cubic Inch", "Liter", "Milliliter", "Cubic Meter", "Cubic Centimeter", "Quart", "Pint"}; 
     public static final String[] lengthUnits={"Mile", "Yard", "Feet", "Inch", "Meter", "Kilometer", "Centimeter", "Nautical Mile"};
     public static final String[] temperatureUnits={"Fahrenheit", "Celsius", "Kelvin"};
+    //Method for generating the converter boxes for the various JPanels for volume, length, and temperature conversions
     public static void generateConverterBox(JPanel unitPanel, JComboBox<String> selectBoxOne, JComboBox<String> selectBoxTwo, String[] convertingUnits, double[] unitConversionTable, boolean isTemperatureConversion){
+        //Initializes unitOneIndex (index of unit to convert from) and unitTwoIndex (index of unit to convert to)
         int unitOneIndex=selectBoxOne.getSelectedIndex();
         int unitTwoIndex=selectBoxTwo.getSelectedIndex();
+        //If the two units are the same, alerts the users with a JOptionPane message and breaks out of the method
         if (unitOneIndex==unitTwoIndex){
             JOptionPane.showMessageDialog(null, "Please select two distinct units for conversion between them.");
             return;
         }
+        //Removes the old converter box (the seven components that should be left are the JComboBoxes one and two, the user prompting message, and the generateX button with spaces between all four elements; anything apart from this would be removed, as it is part of the old converter box)
         while (unitPanel.getComponentCount()>7){
             unitPanel.remove(7);
         }
