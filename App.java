@@ -167,37 +167,48 @@ public class App{
             unitTwoField.addKeyListener(numberInputHandle);
         }
     }
+    //Method to handle temperature conversion with inputValue (the numerical value for temperature), inputIndex (the unit to convert from; 0==Fahrenheit, 1==Celsius, 2==Kelvin), and writeIndex(units converted to; same numbers orderd as the inputIndex) as parameters
     public static double convertTemperature(double inputValue, int inputIndex, int writeIndex){
         //Input handle part:
         //Handles out of range values (<0K temperatures, as 0K is absolute zero; temperatures could not be lower than that)
         if (inputIndex==0&&inputValue<-459.67){
+            //Case if it is Fahrenheit and smaller than -459.67 degrees Fahrenheit (absolute zero), parses it to -459.67 to prevent a non-possible value
             inputValue=-459.67;
         }
         if (inputIndex==1&&inputValue<-273.15){
+            //Case if it is Celsius and smaller than -273.15 degrees Celsius (absolute zero), parses it to -273.15 to prevent a non-possible value
             inputValue=-273.15;
         }
         if (inputIndex==2&&inputValue<0){
+            //Cases it is Kelvin and smaller than 0 Kelvin (absolute zero), parses it to 0 to prevent a non-possible value
             inputValue=0;
         }
         //Conversion part
         if (inputIndex==0&&writeIndex==1){
+            //Case it is Fahrenheit to Celsuis
             return (inputValue-32.0)*(5.0/9.0);
         }
         if (inputIndex==0&&writeIndex==2){
+            //Case it is Fahrenheit to Kelvin
             return ((inputValue-32.0)*(5.0/9.0))+273.15;
         }
         if (inputIndex==1&&writeIndex==0){
+            //Case it is Celsius to Fahrenheit
             return (inputValue*(9.0/5.0))+32.0;
         }
         if (inputIndex==1&&writeIndex==2){
+            //Case it is Celsius to Kelvin
             return inputValue+273.15;
         }
         if (inputIndex==2&&writeIndex==0){
+            //Case it is Kelvin to Fahrenheit
             return (inputValue-273.15)*(9.0/5.0)+32.0;
         }
         if (inputIndex==2&&writeIndex==1){
+            //Case it is Kelvin to Celsius
             return inputValue-273.15;
         }
+        //Statement to prevent a compiler error only (would not be reachable by the program)
         return inputValue;
     }
     //Formats all double numbers (returns as a String) to five decimal places (the meaning of %.5f)
