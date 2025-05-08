@@ -31,7 +31,7 @@ import java.awt.BorderLayout;
 /*
     Program: Java Unit Converter
     Programmer: Richard
-    Date: 2025/5/4
+    Date: 2025/5/8
 */
 /*
     References:
@@ -407,10 +407,13 @@ public class App{
         generateTemperature.setToolTipText("Generate the temperature conversion box");
         generateTemperature.addActionListener(buttonHandler);
     }
-    public static void configuretabPanes(JTabbedPane tabPanes){
+    //Method to configure the JTabPane that houses the three panels
+    public static void configureTabPanes(JTabbedPane tabPanes){
+        //sets maximum width to 600, text color to #1C94E9, and sets border to one with spacing to improve UI
         tabPanes.setSize(new Dimension(600, 0));
         tabPanes.setForeground(Color.decode("#1C94E9"));
         tabPanes.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.decode("#1C94E9"), 2), BorderFactory.createEmptyBorder(7, 7, 7, 7)));
+        //Adds the various planes to the tabPane with their respective titles
         tabPanes.addTab("Volume", volumePanel);
         tabPanes.addTab("Length", lengthPanel);
         tabPanes.addTab("Temperature", temperaturePanel);
@@ -418,7 +421,7 @@ public class App{
     public static void main(String[] args) throws Exception{
         //Sets Program Language to English
         Locale.setDefault(Locale.ENGLISH);
-        //Intializes the various frames and panels that contain the user interface
+        //Intializes the various frames, panels, and tabPanes that contain the user interface
         JFrame frame=new JFrame();
         volumePanel=new JPanel();
         lengthPanel=new JPanel();
@@ -426,15 +429,19 @@ public class App{
         JPanel mainPanel=new JPanel();
         JLabel titleLabel=new JLabel("Unit Converter");
         JTabbedPane tabPanes=new JTabbedPane();
+        //Sets teh title to use bold Noto Sans at size 60, aligned center, and with color #1C94E9
         titleLabel.setFont(new Font("Noto Sans", Font.BOLD, 60));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         titleLabel.setForeground(Color.decode("#1C94E9"));
+        //Calls various configuration methods to configure the panels
         configureVolumePanel(volumePanel);
         configureLengthPanel(lengthPanel);
         configureTemperaturePanel(temperaturePanel);
-        configuretabPanes(tabPanes);
+        configureTabPanes(tabPanes);
+        //Sets maximum width of the mainPanel to 600 and adds the tabPane to it in the center
         mainPanel.setSize(new Dimension(600, 0));
         mainPanel.add(tabPanes, BorderLayout.CENTER);
+        //Calls the configureMainFrame method to configure the frame
         configureMainFrame(frame);
         //Appends everything to the frame
         frame.add(titleLabel, BorderLayout.PAGE_START);
