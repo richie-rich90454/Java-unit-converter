@@ -319,25 +319,31 @@ public class App{
             System.err.println("Failed to fetch favicon.");
         }
     }
+    //Method to set up the volumePanel
     public static void configureVolumePanel(JPanel volumePanel){
+        //Initializes the notice label to tell the user that a "-" would be treated as -1 and appends it to the volumePanel
         JLabel noticeLabelForNegativeSign=new JLabel("<html><center>Note: Any \"-\" entered with no trailing number would be treated as -1.</center></html>");
         noticeLabelForNegativeSign.setAlignmentX(Component.CENTER_ALIGNMENT);
+        //Sets the volumePanel to have the title in the JTabbedPane as "Volume", have y-axis BoxLayout, have elements aligned in the center, and size 600x400
         volumePanel.setBorder(new TitledBorder("Volume"));
         volumePanel.setLayout(new BoxLayout(volumePanel, BoxLayout.Y_AXIS));
         volumePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         volumePanel.setPreferredSize(new Dimension(600, 400));
+        //Initializes the two dropdowns (JComboBoxes) for the unit tables with the volumeUnit and center alignment with a tooltip prompting the user to select a volume unit
         volumeDropdownOne=new JComboBox<String>(volumeUnits);
         volumeDropdownOne.setAlignmentX(Component.CENTER_ALIGNMENT);
         volumeDropdownOne.setToolTipText("Select a volume unit");
         volumeDropdownTwo=new JComboBox<String>(volumeUnits);
         volumeDropdownTwo.setAlignmentX(Component.CENTER_ALIGNMENT);
         volumeDropdownTwo.setToolTipText("Select a volume unit");
+        //Appends the JComboBoxes to the volumePanel with vertical spacing between them to improve the UI
         volumePanel.add(volumeDropdownOne);
         volumePanel.add(Box.createVerticalStrut(7));
         volumePanel.add(volumeDropdownTwo);
         volumePanel.add(Box.createVerticalStrut(7));
         volumePanel.add(noticeLabelForNegativeSign);
         volumePanel.add(Box.createVerticalStrut(7));
+        //Initializes a generateVolume button with the title "Generate Conversion", the equivalent of "cursor: pointer;" in CSS, adds it to the volumePanel, makes it centerly aligned, sets the tooltip text to generate the volume conversion box to inform the user of its function, and adds the ActionListener buttonHandler to it
         generateVolume=new JButton("Generate Conversion");
         generateVolume.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         volumePanel.add(generateVolume);
@@ -345,7 +351,9 @@ public class App{
         generateVolume.setToolTipText("Generate the volume conversion box");
         generateVolume.addActionListener(buttonHandler);
     }
+    //Method to set up the length panel
     public static void configureLengthPanel(JPanel lengthPanel){
+        //Comments would be the same as the configureVolumePanel except for the naming and variables being related to length
         JLabel noticeLabelForNegativeSign=new JLabel("<html><center>Note: Any \"-\" entered with no trailing number would be treated as -1.</center></html>");
         noticeLabelForNegativeSign.setAlignmentX(Component.CENTER_ALIGNMENT);
         lengthPanel.setBorder(new TitledBorder("Length"));
@@ -371,7 +379,9 @@ public class App{
         generateLength.setToolTipText("Generate the length conversion box");
         generateLength.addActionListener(buttonHandler);
     }
+    //Method to set up the temperature panel
     public static void configureTemperaturePanel(JPanel temperaturePanel){
+        //Comments would be the same as the configureVolumePanel except for the naming and variables being related to temperature. Furthermore, the label would be expanded to prompt users that values below absolute 0 would be parsed as absolute zero in the respective units
         JLabel noticeLabelForAbsoluteZero=new JLabel("<html><center>Note: Any values for temperature below absolute 0 (-459.67 Degrees Fahrenheit, -273.15 Degrees Celsius, or 0 Kelvin) would be taken as their respective absolute 0 values. Any \\\"-\\\" entered with no trailing number would be treated as -1.</center></html>");
         noticeLabelForAbsoluteZero.setAlignmentX(Component.CENTER_ALIGNMENT);
         temperaturePanel.setBorder(new TitledBorder("Temperature"));
