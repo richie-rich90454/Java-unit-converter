@@ -170,22 +170,29 @@ public class App{
                                 break;
                             }
                         }
-                        if (!isValidNumber||numberInput.length()==0||numberInput.equals("-")||numberInput.equals(".")){
+                        //If it is not a valid number, no digits are inputed, or is only ".", returns and breaks from the method
+                        if (!isValidNumber||numberInput.length()==0||numberInput.equals(".")){
                             writeField.setText("");
                             return;
                         }
+                        //parses the numberInput String as a double
                         double originalDouble=Double.parseDouble(numberInput);
+                        //Initializes the convertedDouble variable to store the converted unit
                         double convertedDouble;
                         if (isTemperatureConversion){
+                            //If it is already a temperature conversion, calls the convertTemperature method with the parameters required
                             convertedDouble=convertTemperature(originalDouble, inputUnitIndex, writeUnitIndex);
                         }
                         else{
+                            //If not, uses unit ratios (dimentional analysis) with ratios from the unitConversionTable to convert the unit to the other unit
                             convertedDouble=originalDouble*unitConversionTable[inputUnitIndex]/unitConversionTable[writeUnitIndex];
                         }
+                        //Sets the writeField (unit converted to) to the convertedDouble (the "" is due to the .setText method only accepting Strings)
                         writeField.setText(""+formatDoubleValues(convertedDouble));
                     }
                 }
             };
+            //Adds KeyListeners to the two unit input fields
             unitOneField.addKeyListener(numberInputHandle);
             unitTwoField.addKeyListener(numberInputHandle);
         }
