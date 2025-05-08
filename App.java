@@ -1,6 +1,7 @@
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.Clip;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -29,6 +30,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Locale;
 import java.awt.BorderLayout;
@@ -63,13 +65,17 @@ import java.awt.BorderLayout;
         22. Toolkit: https://docs.oracle.com/javase/8/docs/api/java/awt/Toolkit.html
         23. AudioFormat: https://docs.oracle.com/javase/8/docs/api/javax/sound/sampled/AudioFormat.html
         24. AudioSystem: https://docs.oracle.com/javase/8/docs/api/javax/sound/sampled/AudioSystem.html
-        25. SourceDataLine: https://docs.oracle.com/javase/8/docs/api/javax/sound/sampled/SourceDataLine.html
+        25. Clip: https://docs.oracle.com/javase/8/docs/api/javax/sound/sampled/Clip.html
+        26. AudioInputStream: https://docs.oracle.com/javase/8/docs/api/javax/sound/sampled/AudioInputStream.html
  */
 public class App{
     //Declares static variables (i.e. JPanels, JComboBoxes -basically <select></select> equivalent in Java Swing, and JButtons) for use in the program
     static JPanel volumePanel, lengthPanel, temperaturePanel;
     static JComboBox<String> volumeDropdownOne, volumeDropdownTwo, lengthDropdownOne, lengthDropdownTwo, temperatureDropdownOne, temperatureDropdownTwo;
     static JButton generateVolume, generateLength, generateTemperature;
+    //Initializes various variables for use in playing the 432Hz tone including the audio byte array and the Clip object for storing the audio and playing it instantly when wanted
+    static byte[] audioInformation;
+    static Clip beepAudioClip;
     //Declares the various conversion ratios used to convert a certain unit to the base unit (liter for volume, meter for length) except for temeperature
     public static final double[] conversionTableForVolume={3.78541, 0.236588, 0.014787, 0.004929, 28.3168, 764.555, 0.016387, 1, 0.001, 1000, 0.001, 0.946353, 0.473176};
     public static final double[] conversionTableForLength={1609.344, 0.9144, 0.3048, 0.0254, 1, 1000, 0.01, 1852};
@@ -295,6 +301,30 @@ public class App{
         UIManager.put("ToolTip.foreground", Color.decode("#000000"));
         //Sets border for the tooltip to black to make it visible
         UIManager.put("ToolTip.border", new BorderUIResource.LineBorderUIResource(Color.decode("#000000"), 1));
+        //Audio preloading section
+        //The sample number is based off of sample rate per second 48000 (Hz), duration 350ms
+        int sampleNumber=(int) ((48000*350)/1000.0);
+        //Creates an audioInformation byte array that stores sampleNumber of tones for the raw sound data
+        audioInformation=new byte[sampleNumber];
+        //Loops sampleNumber of times to populate the audioInformation array
+        for (int i=0;i<sampleNumber;i++){
+            //Populates with a tiny slice of the 432Hz sine wave (the 80 is the amplitude of the sine function, and it is used to set how loud the audio should be )
+            audioInformation[i]=(byte)(Math.sin(i*2.0*Math.PI*432/48000)*80);
+        }
+        try{
+            //Declares the audio format as with 48000Hz sample rate, 8-bit audio, stereo, signed, and bigEndian
+            AudioFormat audioFormat=new AudioFormat((float) 48000, 8, 2, true, true);
+            //Creates a new audioInputStream for playing by inputting the byte array, the audio format, and the length of the byte array to play the content of the byte array
+            AudioInputStream audioInputStream=new AudioInputStream(new ByteArrayInputStream(audioInformation), audioFormat, audioInformation.length);
+            //Adds the clip to a global static Clip object and allows it to be played back quickly
+            beepAudioClip=AudioSystem.getClip();
+            beepAudioClip.open(audioInputStream);
+        }
+        catch (Exception exception){
+            //If the previous fails, prints the error and the Clip object would be set to null
+            beepAudioClip=null;
+            System.err.println("Failed to initialize audio"+exception);
+        }
     }
     //Action listener for the generateX buttons
     public static ActionListener buttonHandler=new ActionListener(){
@@ -431,25 +461,15 @@ public class App{
         tabPanes.addTab("Length", lengthPanel);
         tabPanes.addTab("Temperature", temperaturePanel);
     }
+    //Function to play the audio beep for the generateX buttons
     public static void playBeep(){
-        try{
-            int duration=300;
-            double frequency=432;
-            double sampleRate=48000;
-            int sampleNumber=(int) ((sampleRate*duration)/1000);
-            byte[] audioInformation=new byte[sampleNumber];
-            for (int i=0;i<sampleNumber;i++){
-                audioInformation[i]=(byte)(Math.sin(i*2.0*Math.PI*frequency/sampleRate)*160);
-            }
-            AudioFormat audioFormat=new AudioFormat((float) sampleRate, 8, 1, true, false);
-            SourceDataLine line=AudioSystem.getSourceDataLine(audioFormat);
-            line.open(audioFormat);
-            line.start();
-            line.write(audioInformation, 0, audioInformation.length);
-            line.drain();
-            line.close();
+        if (beepAudioClip!=null){
+            //If the audio clip initializes correctly, starts from position 0 on the array and starts playing
+            beepAudioClip.setFramePosition(0);
+            beepAudioClip.start();
         }
-        catch (Exception exception){
+        else{
+            //If the audio clip fails to initialize, the default system beep is played
             Toolkit.getDefaultToolkit().beep();
         }
     }
