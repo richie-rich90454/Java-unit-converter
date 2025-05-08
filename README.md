@@ -11,7 +11,7 @@ A Java Swing application for converting between volume, length, and temperature 
 ### 1. Volume Conversion
 Convert between 13 volume units:
 * Gallons
-* Cups
+* U.S. Cups
 * Tablespoons
 * Teaspoons
 * Cubic Feet
