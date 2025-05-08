@@ -83,14 +83,18 @@ public class App{
         while (unitPanel.getComponentCount()>7){
             unitPanel.remove(7);
         }
+        //If it is actually unit conversion (not using else if to prevent compiler issue), which is the two unit (indicies) are different
         if (unitOneIndex!=unitTwoIndex){
+            //Initializes the conversionBox for housing the inputs and conversion, sets it to y-axis oriented BorderLayout, makes the x-axis elements aligned to the center
             JPanel newConversionBox=new JPanel();
             newConversionBox.setLayout(new BoxLayout(newConversionBox, BoxLayout.Y_AXIS));
             newConversionBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+            //Initializes the two input fields for the two units and uses a tooltip to prompt the user to input the values there (conversion happens in both places with input)
             JTextField unitOneField=new JTextField(15);
             unitOneField.setToolTipText("Input your value for unit "+convertingUnits[unitOneIndex]+" here");
             JTextField unitTwoField=new JTextField(15);
             unitTwoField.setToolTipText("Input your value for unit "+convertingUnits[unitTwoIndex]+" here");
+            //Sets the two labels to indicate to the user which input box is which and customizes them with the EB Garamond font and the color #1C94E9 and appends the labels and fields to the newConversionBox
             JLabel unitOneLabel=new JLabel(convertingUnits[unitOneIndex]);
             unitOneLabel.setFont(new Font("EB Garamond", Font.PLAIN, 17));
             unitOneLabel.setForeground(Color.decode("#1C94E9"));
@@ -102,16 +106,22 @@ public class App{
             unitTwoLabel.setForeground(Color.decode("#1C94E9"));
             newConversionBox.add(unitTwoLabel);
             newConversionBox.add(unitTwoField);
+            //Adds space to the unitPanel before the newConversionBox to make the UI look better
             unitPanel.add(Box.createVerticalStrut(20));
             unitPanel.add(newConversionBox);
+            //Applies the changes to the unitPanel (needs to re-render the section)
             unitPanel.revalidate();
             unitPanel.repaint();
+            //KeyListener (calls on key actions such as keyup or keydown) to handle the actual conversion
             KeyListener numberInputHandle=new KeyAdapter(){
                 public void keyReleased(KeyEvent event){
+                    //Uses a JTextField and the .getText() method to fetch the text from the inputing JTextField
                     JTextField inputField=(JTextField) event.getSource();
                     String numberInput=inputField.getText().trim();
+                    //The writeField is listed as the TextField to write the finished converted unit to
                     JTextField writeField;
                     int inputUnitIndex, writeUnitIndex;
+                    //Checks which TextField the user is inputting from and sets the respective field as the inputField and the other as the writeField
                     if (inputField==unitOneField){
                         writeField=unitTwoField;
                         inputUnitIndex=unitOneIndex;
@@ -122,6 +132,7 @@ public class App{
                         writeUnitIndex=unitOneIndex;
                         inputUnitIndex=unitTwoIndex;
                     }
+                    //Handles case "-" and parses it as -1 to prevent issues
                     if (numberInput.equals("-")){
                         if (isTemperatureConversion){
                             writeField.setText(formatDoubleValues(convertTemperature(-1, inputUnitIndex, writeUnitIndex)));
@@ -132,20 +143,28 @@ public class App{
                         return;
                     }
                     else{
+                        //Performs number validation to check if it is a number and is a floating point number
                         boolean isValidNumber=true;
                         boolean hasDecimalPoint=false;
+                        //Iterates through the numberInput String to validate
                         for (int i=0;i<numberInput.length();i++){
+                            //Uses numberInput's character at i for comparison by using the .charAt() method of Strings and saving it as a char to validate each index and character
                             char digit=numberInput.charAt(i);
+                            //If it is a '-' at the first number, indicating that it is a negative number, than it is fine (continues)
                             if (i==0&&digit=='-'){
                                 continue;
                             }
+                            //If the character is a decimal point
                             if (digit=='.'){
+                                //If there is already a decimal point, the input is not a number (no multiple decimal points), so sets isValidNumber to false and breaks
                                 if (hasDecimalPoint){
                                     isValidNumber=false;
                                     break;
                                 }
+                                //If it is the first time, then sets hasDecimalPoint to true
                                 hasDecimalPoint=true;
                             }
+                            //If the number is, in terms of ASCII, smaller than '0' or larger than '9', sets isValidNumber to false and breaks, as the number is not accurate (only handles base 10 at this point)
                             else if (digit<'0'||digit>'9'){
                                 isValidNumber=false;
                                 break;
