@@ -20,6 +20,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -56,6 +57,7 @@ import java.awt.BorderLayout;
         19. Cursor: https://docs.oracle.com/javase/8/docs/api/java/awt/Cursor.html
         20. BorderUIResource: https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/javax/swing/plaf/BorderUIResource.html
         21. HTML in JLabel: https://stackoverflow.com/questions/6635730/how-do-i-put-html-in-a-jlabel-in-java
+        22. Toolkit: https://docs.oracle.com/javase/8/docs/api/java/awt/Toolkit.html
  */
 public class App{
     //Declares static variables (i.e. JPanels, JComboBoxes -basically <select></select> equivalent in Java Swing, and JButtons) for use in the program
@@ -293,6 +295,11 @@ public class App{
         @Override
         public void actionPerformed(ActionEvent event){
             //Calls the generateConverterBox method with relevant parameters
+            new Thread(new Runnable(){
+               public void run(){
+                playBeep();
+               } 
+            }).start();
             if (event.getSource().equals(generateVolume)){
                 generateConverterBox(volumePanel, volumeDropdownOne, volumeDropdownTwo, volumeUnits, conversionTableForVolume, false);
             }
@@ -417,6 +424,9 @@ public class App{
         tabPanes.addTab("Volume", volumePanel);
         tabPanes.addTab("Length", lengthPanel);
         tabPanes.addTab("Temperature", temperaturePanel);
+    }
+    public static void playBeep(){
+        Toolkit.getDefaultToolkit().beep();
     }
     public static void main(String[] args) throws Exception{
         //Sets Program Language to English
