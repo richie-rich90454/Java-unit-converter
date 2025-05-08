@@ -1,3 +1,6 @@
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.SourceDataLine;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -58,6 +61,9 @@ import java.awt.BorderLayout;
         20. BorderUIResource: https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/javax/swing/plaf/BorderUIResource.html
         21. HTML in JLabel: https://stackoverflow.com/questions/6635730/how-do-i-put-html-in-a-jlabel-in-java
         22. Toolkit: https://docs.oracle.com/javase/8/docs/api/java/awt/Toolkit.html
+        23. AudioFormat: https://docs.oracle.com/javase/8/docs/api/javax/sound/sampled/AudioFormat.html
+        24. AudioSystem: https://docs.oracle.com/javase/8/docs/api/javax/sound/sampled/AudioSystem.html
+        25. SourceDataLine: https://docs.oracle.com/javase/8/docs/api/javax/sound/sampled/SourceDataLine.html
  */
 public class App{
     //Declares static variables (i.e. JPanels, JComboBoxes -basically <select></select> equivalent in Java Swing, and JButtons) for use in the program
@@ -426,7 +432,26 @@ public class App{
         tabPanes.addTab("Temperature", temperaturePanel);
     }
     public static void playBeep(){
-        Toolkit.getDefaultToolkit().beep();
+        try{
+            int duration=300;
+            double frequency=432;
+            double sampleRate=48000;
+            int sampleNumber=(int) ((sampleRate*duration)/1000);
+            byte[] audioInformation=new byte[sampleNumber];
+            for (int i=0;i<sampleNumber;i++){
+                audioInformation[i]=(byte)(Math.sin(i*2.0*Math.PI*frequency/sampleRate)*160);
+            }
+            AudioFormat audioFormat=new AudioFormat((float) sampleRate, 8, 1, true, false);
+            SourceDataLine line=AudioSystem.getSourceDataLine(audioFormat);
+            line.open(audioFormat);
+            line.start();
+            line.write(audioInformation, 0, audioInformation.length);
+            line.drain();
+            line.close();
+        }
+        catch (Exception exception){
+            Toolkit.getDefaultToolkit().beep();
+        }
     }
     public static void main(String[] args) throws Exception{
         //Sets Program Language to English
