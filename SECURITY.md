@@ -21,8 +21,8 @@ If you discover a security vulnerability in this project, please follow these st
    - The affected version(s) (e.g., 1.0.0).
    - Any proof-of-concept code or test cases.
 3. **Response timeline**:
-   - You’ll receive an acknowledgment within **48 hours**.
-   - A fix or workaround will be proposed in a **week** for critical issues; non-critical issues will be scheduled according to release cadence.
+   - You’ll receive an acknowledgment within **31 days**.
+   - A fix or workaround will be proposed in a **month** for critical issues; non-critical issues will be scheduled according to release cadence.
 4. **After the fix**:
    - A patched version (e.g., 1.0.1) will be released to the 1.0.x line.
    - A public advisory (with CVE if applicable) will be published when the fix is available.
