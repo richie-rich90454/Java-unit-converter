@@ -425,7 +425,7 @@ public class App{
     //Method to set up the temperature panel
     public static void configureTemperaturePanel(JPanel temperaturePanel){
         //Comments would be the same as the configureVolumePanel except for the naming and variables being related to temperature. Furthermore, the label would be expanded to prompt users that values below absolute 0 would be parsed as absolute zero in the respective units
-        JLabel noticeLabelForAbsoluteZero=new JLabel("<html><center>Note: Any values for temperature below absolute 0 (-459.67 Degrees Fahrenheit, -273.15 Degrees Celsius, or 0 Kelvin) would be taken as their respective absolute 0 values. Any \\\"-\\\" entered with no trailing number would be treated as -1.</center></html>");
+        JLabel noticeLabelForAbsoluteZero=new JLabel("<html><center>Note: 1. Any values for temperature below absolute 0 (-459.67 Degrees Fahrenheit, -273.15 Degrees Celsius, or 0 Kelvin) would be taken as their respective absolute 0 values. <br>2.Any \\\"-\\\" entered with no trailing number would be treated as -1.</center></html>");
         noticeLabelForAbsoluteZero.setAlignmentX(Component.CENTER_ALIGNMENT);
         temperaturePanel.setBorder(new TitledBorder("Temperature"));
         temperaturePanel.setLayout(new BoxLayout(temperaturePanel, BoxLayout.Y_AXIS));
