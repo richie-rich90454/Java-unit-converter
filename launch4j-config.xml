@@ -1,0 +1,19 @@
+<launch4jConfig>
+    <dontWrapJar>false</dontWrapJar>
+    <headerType>console</headerType>
+    <jar>C:\Users\rjian\Desktop\Java-unit-converter\UnitConverter.jar</jar>
+    <outfile>C:\Users\rjian\Desktop\Java-unit-converter\UnitConverter.exe</outfile>
+    <errTitle>Unit Converter Error</errTitle>
+    <chdir>.</chdir>
+    <priority>normal</priority>
+    <downloadUrl>https://www.java.com/en/download/</downloadUrl>
+    <customProcName>false</customProcName>
+    <stayAlive>false</stayAlive>
+    <manifest></manifest>
+    <jre>
+        <path>C:\Program Files\Java\jdk-22.0.2</path>
+        <minVersion>22</minVersion>
+        <jdkPreference>preferJre</jdkPreference>
+        <runtimeBits>64</runtimeBits>
+    </jre>
+</launch4jConfig>

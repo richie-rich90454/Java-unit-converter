@@ -162,3 +162,7 @@ dist
 .pnp.*
 # Ignores compiled files
 output
+# Adds exception to not ignore UnitConverter.exe
+!UnitConverter.exe
+# Ignores META-INF
+META-INF
