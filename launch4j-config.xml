@@ -12,8 +12,7 @@
     <manifest></manifest>
     <icon>C:\Users\rjian\Desktop\Java-unit-converter\favicon.ico</icon>
     <jre>
-        <path>C:\Program Files\Java\jdk-22.0.2</path>
-        <minVersion>22</minVersion>
+        <minVersion>1.8</minVersion>
         <jdkPreference>preferJre</jdkPreference>
         <runtimeBits>64</runtimeBits>
     </jre>
