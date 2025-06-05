@@ -1,6 +1,6 @@
 <launch4jConfig>
     <dontWrapJar>false</dontWrapJar>
-    <headerType>console</headerType>
+    <headerType>gui</headerType>
     <jar>C:\Users\rjian\Desktop\Java-unit-converter\UnitConverter.jar</jar>
     <outfile>C:\Users\rjian\Desktop\Java-unit-converter\UnitConverter.exe</outfile>
     <errTitle>Unit Converter Error</errTitle>
@@ -10,6 +10,7 @@
     <customProcName>false</customProcName>
     <stayAlive>false</stayAlive>
     <manifest></manifest>
+    <icon>C:\Users\rjian\Desktop\Java-unit-converter\favicon.ico</icon>
     <jre>
         <path>C:\Program Files\Java\jdk-22.0.2</path>
         <minVersion>22</minVersion>
