@@ -2,11 +2,18 @@
 
 # Java Unit Converter
 
-A clean and intuitive **Java Swing desktop application** for converting **volume, length, and temperature units** with **real-time calculations**.
+A clean and intuitive **Java Swing desktop unit converter** for **volume, length, and temperature conversion**, featuring real-time calculations and a simple GUI. It supports common measurement units in a lightweight Java Swing desktop interface.
 
 ![Java](https://img.shields.io/badge/Java-8%2B-blue)
-![License](https://img.shields.io/badge/License-Apache%202.0-green)
+![Platform](https://img.shields.io/badge/Platform-Desktop-lightgrey)
 ![GUI](https://img.shields.io/badge/GUI-Java%20Swing-orange)
+
+![License](https://img.shields.io/github/license/richie-rich90454/Java-unit-converter)
+![Repo Size](https://img.shields.io/github/repo-size/richie-rich90454/Java-unit-converter)
+![Last Commit](https://img.shields.io/github/last-commit/richie-rich90454/Java-unit-converter)
+![Issues](https://img.shields.io/github/issues/richie-rich90454/Java-unit-converter)
+![Pull Requests](https://img.shields.io/github/issues-pr/richie-rich90454/Java-unit-converter)
+![Latest Release](https://img.shields.io/github/v/release/richie-rich90454/Java-unit-converter)
 
 </div>
 
