@@ -1,0 +1,19 @@
+<launch4jConfig>
+    <dontWrapJar>false</dontWrapJar>
+    <headerType>gui</headerType>
+    <jar>..\dist\UnitConverter.jar</jar>
+    <outfile>..\dist\UnitConverter.exe</outfile>
+    <errTitle>Unit Converter Error</errTitle>
+    <chdir>.</chdir>
+    <priority>normal</priority>
+    <downloadUrl>https://www.java.com/en/download/</downloadUrl>
+    <customProcName>false</customProcName>
+    <stayAlive>false</stayAlive>
+    <manifest></manifest>
+    <icon>..\src\main\resources\images\favicon.ico</icon>
+    <jre>
+        <minVersion>1.8</minVersion>
+        <jdkPreference>preferJre</jdkPreference>
+        <runtimeBits>64</runtimeBits>
+    </jre>
+</launch4jConfig>

@@ -19,8 +19,8 @@
 *.tar.gz
 *.rar
 
-# Do not ignore UnitConverter.jar
-!UnitConverter.jar
+# Do not ignore UnitConverter.jar (now in dist/)
+!dist/UnitConverter.jar
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
@@ -162,7 +162,13 @@ dist
 .pnp.*
 # Ignores compiled files
 output
-# Adds exception to not ignore UnitConverter.exe
-!UnitConverter.exe
+# Adds exception to not ignore UnitConverter.exe (now in dist/)
+!dist/UnitConverter.exe
 # Ignores META-INF
 META-INF
+
+# Build directories
+build/
+dist/
+!dist/UnitConverter.jar
+!dist/UnitConverter.exe

@@ -1,0 +1,34 @@
+<launch4jConfig>
+    <dontWrapJar>false</dontWrapJar>
+    <headerType>gui</headerType>
+    <jar>..\dist\UnitConverter.jar</jar>
+    <outfile>..\dist\UnitConverter-bundled.exe</outfile>
+    <errTitle>Unit Converter Error</errTitle>
+    <chdir>.</chdir>
+    <priority>normal</priority>
+    <downloadUrl>https://www.java.com/en/download/</downloadUrl>
+    <customProcName>false</customProcName>
+    <stayAlive>false</stayAlive>
+    <manifest></manifest>
+    <icon>..\src\main\resources\images\favicon.ico</icon>
+    <jre>
+        <minVersion>1.8</minVersion>
+        <jdkPreference>preferJre</jdkPreference>
+        <runtimeBits>64</runtimeBits>
+        <bundledJre64Bit>true</bundledJre64Bit>
+        <bundledJrePath>jre</bundledJrePath>
+        <bundledJreAsFallback>true</bundledJreAsFallback>
+    </jre>
+    <versionInfo>
+        <fileVersion>1.0.0.0</fileVersion>
+        <txtFileVersion>1.0.0.0</txtFileVersion>
+        <fileDescription>Java Unit Converter</fileDescription>
+        <copyright>2026 richie-rich90454</copyright>
+        <productVersion>1.0.0.0</productVersion>
+        <txtProductVersion>1.0.0.0</txtProductVersion>
+        <productName>Java Unit Converter</productName>
+        <companyName>richie-rich90454</companyName>
+        <internalName>UnitConverter</internalName>
+        <originalFilename>UnitConverter-bundled.exe</originalFilename>
+    </versionInfo>
+</launch4jConfig>
