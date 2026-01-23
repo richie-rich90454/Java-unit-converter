@@ -1,13 +1,12 @@
 /*
-    build with
-    javac App.java
-    jar cvfm UnitConverter.jar MANIFEST.txt -C ./ .  
-    native-image -jar UnitConverter.jar UnitConverter --no-fallback -H:+ReportExceptionStackTraces -H:+AddAllCharsets --enable-url-protocols=http,https --initialize-at-run-time=sun.awt.dnd.SunDropTargetContextPeer -H:ConfigurationFileDirectories=./native-config --no-manual-registration
+    build with one from
+    build-exe-bundled.bat
+    build-exe.bat
+    build-jar.bat
  */
 /*
     run with
-    mkdir -p native-config
-    java -agentlib:native-image-agent=config-output-dir=./native-config -jar UnitConverter.jar
+    run.bat
  */
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
