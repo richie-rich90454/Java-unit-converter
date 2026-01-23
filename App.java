@@ -1,3 +1,8 @@
+/*
+    build with
+    javac App.java
+    jar cvfm UnitConverter.jar MANIFEST.txt -C ./ .  
+ */
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -34,6 +39,10 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Locale;
 import java.awt.BorderLayout;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.Properties;
 /*
     Program: Java Unit Converter
     Programmer: Richard
@@ -83,6 +92,343 @@ public class App{
     public static final String[] volumeUnits={"Gallon", "U.S. Cup", "Tablespoon", "Teaspoon", "Cubic Feet", "Cubic Yard", "Cubic Inch", "Liter", "Milliliter", "Cubic Meter", "Cubic Centimeter", "Quart", "Pint"}; 
     public static final String[] lengthUnits={"Mile", "Yard", "Feet", "Inch", "Meter", "Kilometer", "Centimeter", "Nautical Mile"};
     public static final String[] temperatureUnits={"Fahrenheit", "Celsius", "Kelvin"};
+    //Theme management variables and methods for light/dark mode support
+    public enum ThemeMode {
+        SYSTEM,
+        LIGHT,
+        DARK
+    }
+    static class ThemeManager{
+        //Stores current theme mode (SYSTEM follows OS, LIGHT forces light, DARK forces dark)
+        private static ThemeMode currentMode=ThemeMode.SYSTEM;
+        //Stores whether system is in dark mode (detected from OS)
+        private static boolean systemDarkMode=false;
+        //Properties for storing theme preferences
+        private static Properties themePrefs=new Properties();
+        //File name for theme preferences
+        private static final String PREFS_FILE=".unitconverter-theme.properties";
+        //Light theme colors (matches original exactly)
+        private static final Color LIGHT_PANEL_BG=Color.decode("#FFFFFF");
+        private static final Color LIGHT_BUTTON_BG=Color.decode("#DE0000");
+        private static final Color LIGHT_BUTTON_FG=Color.decode("#FFFFFF");
+        private static final Color LIGHT_TEXTFIELD_BG=Color.decode("#FFFFFF");
+        private static final Color LIGHT_TEXTFIELD_FG=Color.decode("#000000");
+        private static final Color LIGHT_COMBOBOX_BG=Color.decode("#1C94E9");
+        private static final Color LIGHT_COMBOBOX_FG=Color.decode("#FFFFFF");
+        private static final Color LIGHT_LABEL_FG=Color.decode("#1C94E9");
+        private static final Color LIGHT_TOOLTIP_BG=Color.decode("#FADE54");
+        private static final Color LIGHT_TOOLTIP_FG=Color.decode("#000000");
+        private static final Color LIGHT_BORDER=Color.decode("#000000");
+        private static final Color LIGHT_TAB_FG=Color.decode("#1C94E9");
+        private static final Color LIGHT_UNIT_LABEL=Color.decode("#1C94E9");
+        //Dark theme colors (adjusted for better contrast)
+        private static final Color DARK_PANEL_BG=Color.decode("#2D2D2D");
+        private static final Color DARK_BUTTON_BG=Color.decode("#FF4444");
+        private static final Color DARK_BUTTON_FG=Color.decode("#FFFFFF");
+        private static final Color DARK_TEXTFIELD_BG=Color.decode("#3D3D3D");
+        private static final Color DARK_TEXTFIELD_FG=Color.decode("#E0E0E0");
+        private static final Color DARK_COMBOBOX_BG=Color.decode("#3A7CA5");
+        private static final Color DARK_COMBOBOX_FG=Color.decode("#FFFFFF");
+        private static final Color DARK_LABEL_FG=Color.decode("#6BB5E9");
+        private static final Color DARK_TOOLTIP_BG=Color.decode("#5A5A00");
+        private static final Color DARK_TOOLTIP_FG=Color.decode("#FFFFFF");
+        private static final Color DARK_BORDER=Color.decode("#666666");
+        private static final Color DARK_TAB_FG=Color.decode("#6BB5E9");
+        private static final Color DARK_UNIT_LABEL=Color.decode("#6BB5E9");
+        static{
+            loadPreferences();
+            detectSystemTheme();
+        }
+        public static void detectSystemTheme(){
+            String os=System.getProperty("os.name").toLowerCase();
+            try{
+                if (os.contains("win")){
+                    //Windows: check registry
+                    Process process=Runtime.getRuntime().exec(new String[]{"reg","query","HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize","/v","AppsUseLightTheme"});
+                    process.waitFor();
+                    java.io.BufferedReader reader=new java.io.BufferedReader(new java.io.InputStreamReader(process.getInputStream()));
+                    String line;
+                    while ((line=reader.readLine())!=null){
+                        if (line.contains("REG_DWORD")){
+                            if (line.contains("0x0")){
+                                systemDarkMode=true;
+                            }
+                            else{
+                                systemDarkMode=false;
+                            }
+                            break;
+                        }
+                    }
+                    reader.close();
+                }
+                else if (os.contains("mac")){
+                    //macOS: check defaults
+                    Process process=Runtime.getRuntime().exec(new String[]{"defaults","read","-g","AppleInterfaceStyle"});
+                    process.waitFor();
+                    java.io.BufferedReader reader=new java.io.BufferedReader(new java.io.InputStreamReader(process.getInputStream()));
+                    String line=reader.readLine();
+                    if (line!=null&&line.contains("Dark")){
+                        systemDarkMode=true;
+                    }
+                    else{
+                        systemDarkMode=false;
+                    }
+                    reader.close();
+                }
+                else if (os.contains("nix")||os.contains("nux")){
+                    //Linux: check gsettings
+                    try{
+                        Process process=Runtime.getRuntime().exec(new String[]{"gsettings","get","org.gnome.desktop.interface","gtk-theme"});
+                        process.waitFor();
+                        java.io.BufferedReader reader=new java.io.BufferedReader(new java.io.InputStreamReader(process.getInputStream()));
+                        String line=reader.readLine();
+                        if (line!=null&&line.toLowerCase().contains("dark")){
+                            systemDarkMode=true;
+                        }
+                        else{
+                            systemDarkMode=false;
+                        }
+                        reader.close();
+                    }
+                    catch (Exception e){
+                        //Fallback: check environment variable
+                        String gtkTheme=System.getenv("GTK_THEME");
+                        if (gtkTheme!=null&&gtkTheme.toLowerCase().contains("dark")){
+                            systemDarkMode=true;
+                        }
+                        else{
+                            systemDarkMode=false;
+                        }
+                    }
+                }
+            }
+            catch (Exception e){
+                //If detection fails, assume light mode
+                systemDarkMode=false;
+                System.err.println("Theme detection failed, defaulting to light mode: "+e.getMessage());
+            }
+        }
+        public static boolean isDarkModeActive(){
+            switch (currentMode){
+                case LIGHT: return false;
+                case DARK: return true;
+                case SYSTEM: default: return systemDarkMode;
+            }
+        }
+        public static ThemeMode getCurrentMode(){
+            return currentMode;
+        }
+        public static void setMode(ThemeMode mode){
+            currentMode=mode;
+            savePreferences();
+            applyTheme();
+        }
+        public static void cycleMode(){
+            switch (currentMode){
+                case SYSTEM:
+                    currentMode=ThemeMode.LIGHT;
+                    break;
+                case LIGHT:
+                    currentMode=ThemeMode.DARK;
+                    break;
+                case DARK:
+                    currentMode=ThemeMode.SYSTEM;
+                    break;
+            }
+            savePreferences();
+            applyTheme();
+        }
+        public static String getModeDescription(){
+            switch (currentMode){
+                case SYSTEM:
+                    return "Automatic (Follow System)";
+                case LIGHT:
+                    return "Light Mode";
+                case DARK:
+                    return "Dark Mode";
+                default:
+                    return "Unknown";
+            }
+        }
+        public static String getModeButtonText(){
+            switch (currentMode){
+                case SYSTEM:
+                    return "A";
+                case LIGHT:
+                    return "L";
+                case DARK:
+                    return "D";
+                default:
+                    return "?";
+            }
+        }
+        public static Color getPanelBackground(){
+            return isDarkModeActive()?DARK_PANEL_BG:LIGHT_PANEL_BG;
+        }
+        public static Color getButtonBackground(){
+            return isDarkModeActive()?DARK_BUTTON_BG:LIGHT_BUTTON_BG;
+        }
+        public static Color getButtonForeground(){
+            return isDarkModeActive()?DARK_BUTTON_FG:LIGHT_BUTTON_FG;
+        }
+        public static Color getTextFieldBackground(){
+            return isDarkModeActive()?DARK_TEXTFIELD_BG:LIGHT_TEXTFIELD_BG;
+        }
+        public static Color getTextFieldForeground(){
+            return isDarkModeActive()?DARK_TEXTFIELD_FG:LIGHT_TEXTFIELD_FG;
+        }
+        public static Color getComboBoxBackground(){
+            return isDarkModeActive()?DARK_COMBOBOX_BG:LIGHT_COMBOBOX_BG;
+        }
+        public static Color getComboBoxForeground(){
+            return isDarkModeActive()?DARK_COMBOBOX_FG:LIGHT_COMBOBOX_FG;
+        }
+        public static Color getLabelForeground(){
+            return isDarkModeActive()?DARK_LABEL_FG:LIGHT_LABEL_FG;
+        }
+        public static Color getToolTipBackground(){
+            return isDarkModeActive()?DARK_TOOLTIP_BG:LIGHT_TOOLTIP_BG;
+        }
+        public static Color getToolTipForeground(){
+            return isDarkModeActive()?DARK_TOOLTIP_FG:LIGHT_TOOLTIP_FG;
+        }
+        public static Color getBorderColor(){
+            return isDarkModeActive()?DARK_BORDER:LIGHT_BORDER;
+        }
+        public static Color getTabForeground(){
+            return isDarkModeActive()?DARK_TAB_FG:LIGHT_TAB_FG;
+        }
+        public static Color getUnitLabelColor(){
+            return isDarkModeActive()?DARK_UNIT_LABEL:LIGHT_UNIT_LABEL;
+        }
+        private static void loadPreferences(){
+            try{
+                File prefsFile=new File(PREFS_FILE);
+                if (prefsFile.exists()){
+                    themePrefs.load(new FileInputStream(prefsFile));
+                    String mode=themePrefs.getProperty("theme.mode","SYSTEM");
+                    try{
+                        currentMode=ThemeMode.valueOf(mode);
+                    }
+                    catch (IllegalArgumentException e){
+                        currentMode=ThemeMode.SYSTEM;
+                    }
+                }
+            }
+            catch (Exception e){
+                //If loading fails, use default
+                currentMode=ThemeMode.SYSTEM;
+            }
+        }
+        private static void savePreferences(){
+            try{
+                themePrefs.setProperty("theme.mode",currentMode.name());
+                themePrefs.store(new FileOutputStream(PREFS_FILE),"Unit Converter Theme Preferences");
+            }
+            catch (Exception e){
+                System.err.println("Failed to save theme preferences: "+e.getMessage());
+            }
+        }
+        public static void applyTheme(){
+            //Apply fonts (unchanged from original)
+            Font notoSans=new Font("Noto Sans",Font.PLAIN,14);
+            Font notoSansBold=new Font("Noto Sans",Font.BOLD,14);
+            Font ebGaramond=new Font("EB Garamond",Font.PLAIN,16);
+            UIManager.put("Label.font",notoSans);
+            UIManager.put("Button.font",notoSansBold);
+            UIManager.put("TextField.font",ebGaramond);
+            UIManager.put("ComboBox.font",ebGaramond);
+            UIManager.put("OptionPane.messageFont",ebGaramond);
+            UIManager.put("TitledBorder.font",notoSansBold);
+            UIManager.put("TabbedPane.font",notoSansBold);
+            UIManager.put("ToolTip.font",ebGaramond);
+            //Apply colors based on current theme
+            UIManager.put("Panel.background",getPanelBackground());
+            UIManager.put("Button.background",getButtonBackground());
+            UIManager.put("Button.foreground",getButtonForeground());
+            UIManager.put("TextField.background",getTextFieldBackground());
+            UIManager.put("TextField.foreground",getTextFieldForeground());
+            UIManager.put("ComboBox.background",getComboBoxBackground());
+            UIManager.put("ComboBox.foreground",getComboBoxForeground());
+            UIManager.put("Label.foreground",getLabelForeground());
+            UIManager.put("ToolTip.background",getToolTipBackground());
+            UIManager.put("ToolTip.foreground",getToolTipForeground());
+            UIManager.put("ToolTip.border",new BorderUIResource.LineBorderUIResource(getBorderColor(),1));
+            //TabbedPane specific colors
+            UIManager.put("TabbedPane.background",getPanelBackground());
+            UIManager.put("TabbedPane.foreground",getTabForeground());
+            UIManager.put("TabbedPane.selected",getPanelBackground());
+            UIManager.put("TabbedPane.border",new BorderUIResource.LineBorderUIResource(getBorderColor(),1));
+            //TitledBorder color
+            UIManager.put("TitledBorder.titleColor",getLabelForeground());
+            //Window and frame colors
+            UIManager.put("Frame.background",getPanelBackground());
+            UIManager.put("Frame.foreground",getLabelForeground());
+            //Update existing UI components if frame is already created
+            if (mainFrame!=null){
+                //Set frame background
+                mainFrame.getContentPane().setBackground(getPanelBackground());
+                mainFrame.setBackground(getPanelBackground());
+                //Update all components
+                javax.swing.SwingUtilities.updateComponentTreeUI(mainFrame);
+                //Also update tab pane colors and border
+                if (tabPanes!=null){
+                    tabPanes.setForeground(getTabForeground());
+                    tabPanes.setBackground(getPanelBackground());
+                    tabPanes.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(getTabForeground(), 2), BorderFactory.createEmptyBorder(7, 7, 7, 7)));
+                }
+                //Update title label color
+                if (titleLabelStatic!=null){
+                    titleLabelStatic.setForeground(getLabelForeground());
+                }
+                //Update volume, length, temperature panels background and border
+                if (volumePanel!=null){
+                    volumePanel.setBackground(getPanelBackground());
+                    ((TitledBorder)volumePanel.getBorder()).setTitleColor(getLabelForeground());
+                }
+                if (lengthPanel!=null){
+                    lengthPanel.setBackground(getPanelBackground());
+                    ((TitledBorder)lengthPanel.getBorder()).setTitleColor(getLabelForeground());
+                }
+                if (temperaturePanel!=null){
+                    temperaturePanel.setBackground(getPanelBackground());
+                    ((TitledBorder)temperaturePanel.getBorder()).setTitleColor(getLabelForeground());
+                }
+                //Update all components recursively
+                updateAllComponents(mainFrame.getContentPane());
+            }
+        }
+        private static void updateAllComponents(java.awt.Container container){
+            for (java.awt.Component comp:container.getComponents()){
+                if (comp instanceof javax.swing.JPanel){
+                    ((javax.swing.JPanel)comp).setBackground(getPanelBackground());
+                }
+                if (comp instanceof javax.swing.JLabel){
+                    ((javax.swing.JLabel)comp).setForeground(getLabelForeground());
+                }
+                if (comp instanceof javax.swing.JButton){
+                    ((javax.swing.JButton)comp).setBackground(getButtonBackground());
+                    ((javax.swing.JButton)comp).setForeground(getButtonForeground());
+                }
+                if (comp instanceof javax.swing.JTextField){
+                    ((javax.swing.JTextField)comp).setBackground(getTextFieldBackground());
+                    ((javax.swing.JTextField)comp).setForeground(getTextFieldForeground());
+                }
+                if (comp instanceof javax.swing.JComboBox){
+                    ((javax.swing.JComboBox)comp).setBackground(getComboBoxBackground());
+                    ((javax.swing.JComboBox)comp).setForeground(getComboBoxForeground());
+                }
+                if (comp instanceof java.awt.Container){
+                    updateAllComponents((java.awt.Container)comp);
+                }
+            }
+        }
+    }
+    //Additional static variables for theme support
+    static JFrame mainFrame;
+    static JTabbedPane tabPanes;
+    static JButton themeToggleButton;
+    static JLabel titleLabelStatic;
     //Method for generating the converter boxes for the various JPanels for volume, length, and temperature conversions
     public static void generateConverterBox(JPanel unitPanel, JComboBox<String> selectBoxOne, JComboBox<String> selectBoxTwo, String[] convertingUnits, double[] unitConversionTable, boolean isTemperatureConversion){
         //Initializes unitOneIndex (index of unit to convert from) and unitTwoIndex (index of unit to convert to)
@@ -108,16 +454,16 @@ public class App{
             unitOneField.setToolTipText("Input your value for unit "+convertingUnits[unitOneIndex]+" here");
             JTextField unitTwoField=new JTextField(15);
             unitTwoField.setToolTipText("Input your value for unit "+convertingUnits[unitTwoIndex]+" here");
-            //Sets the two labels to indicate to the user which input box is which and customizes them with the EB Garamond font and the color #1C94E9 and appends the labels and fields to the newConversionBox
+            //Sets the two labels to indicate to the user which input box is which and customizes them with the EB Garamond font and the theme-appropriate color and appends the labels and fields to the newConversionBox
             JLabel unitOneLabel=new JLabel(convertingUnits[unitOneIndex]);
             unitOneLabel.setFont(new Font("EB Garamond", Font.PLAIN, 17));
-            unitOneLabel.setForeground(Color.decode("#1C94E9"));
+            unitOneLabel.setForeground(ThemeManager.getUnitLabelColor());
             newConversionBox.add(unitOneLabel);
             newConversionBox.add(unitOneField);
             newConversionBox.add(Box.createVerticalStrut(15));
             JLabel unitTwoLabel=new JLabel(convertingUnits[unitTwoIndex]);
             unitTwoLabel.setFont(new Font("EB Garamond", Font.PLAIN, 17));
-            unitTwoLabel.setForeground(Color.decode("#1C94E9"));
+            unitTwoLabel.setForeground(ThemeManager.getUnitLabelColor());
             newConversionBox.add(unitTwoLabel);
             newConversionBox.add(unitTwoField);
             //Adds space to the unitPanel before the newConversionBox to make the UI look better
@@ -275,32 +621,8 @@ public class App{
         includeFont("/fonts/NotoSans-Regular.ttf");
         includeFont("/fonts/NotoSans-Bold.ttf");
         includeFont("/fonts/EBGaramond-Regular.ttf");
-        //Configures a few font objects for easier global assignments (prevent the repeated use of new Font() in the UIManager settings below)
-        Font notoSans=new Font("Noto Sans", Font.PLAIN, 14);
-        Font notoSansBold=new Font("Noto Sans", Font.BOLD, 14);
-        Font ebGaramond=new Font("EB Garamond", Font.PLAIN, 16);
-        //Applies the custom fonts for the various components
-        UIManager.put("Label.font", notoSans);
-        UIManager.put("Button.font", notoSansBold);
-        UIManager.put("TextField.font", ebGaramond);
-        UIManager.put("ComboBox.font", ebGaramond);
-        UIManager.put("OptionPane.messageFont", ebGaramond);
-        UIManager.put("TitledBorder.font", notoSansBold);
-        UIManager.put("TabbedPane.font", notoSansBold);
-        UIManager.put("ToolTip.font", ebGaramond);
-        //Sets custom colors for the various components (foreground==text color and background==background color)
-        UIManager.put("Panel.background", Color.decode("#FFFFFF"));
-        UIManager.put("Button.background", Color.decode("#DE0000"));
-        UIManager.put("Button.foreground", Color.decode("#FFFFFF"));
-        UIManager.put("TextField.background", Color.decode("#FFFFFF"));
-        UIManager.put("TextField.foreground", Color.decode("#000000"));
-        UIManager.put("ComboBox.background", Color.decode("#1C94E9"));
-        UIManager.put("ComboBox.foreground", Color.decode("#FFFFFF"));
-        UIManager.put("Label.foreground", Color.decode("#1C94E9"));
-        UIManager.put("ToolTip.background", Color.decode("#FADE54"));
-        UIManager.put("ToolTip.foreground", Color.decode("#000000"));
-        //Sets border for the tooltip to black to make it visible
-        UIManager.put("ToolTip.border", new BorderUIResource.LineBorderUIResource(Color.decode("#000000"), 1));
+        //Apply theme (includes fonts and colors based on system detection or saved preference)
+        ThemeManager.applyTheme();
         //Audio preloading section
         //The sample number is based off of sample rate per second 48000 (Hz), duration 350ms
         int sampleNumber=(int) ((48000*350)/1000.0);
@@ -452,10 +774,10 @@ public class App{
     }
     //Method to configure the JTabPane that houses the three panels
     public static void configureTabPanes(JTabbedPane tabPanes){
-        //sets maximum width to 600, text color to #1C94E9, and sets border to one with spacing to improve UI
+        //sets maximum width to 600, text color to theme-appropriate color, and sets border to one with spacing to improve UI
         tabPanes.setSize(new Dimension(600, 0));
-        tabPanes.setForeground(Color.decode("#1C94E9"));
-        tabPanes.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.decode("#1C94E9"), 2), BorderFactory.createEmptyBorder(7, 7, 7, 7)));
+        tabPanes.setForeground(ThemeManager.getTabForeground());
+        tabPanes.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(ThemeManager.getTabForeground(), 2), BorderFactory.createEmptyBorder(7, 7, 7, 7)));
         //Adds the various planes to the tabPane with their respective titles
         tabPanes.addTab("Volume", volumePanel);
         tabPanes.addTab("Length", lengthPanel);
@@ -484,10 +806,10 @@ public class App{
         JPanel mainPanel=new JPanel();
         JLabel titleLabel=new JLabel("Unit Converter");
         JTabbedPane tabPanes=new JTabbedPane();
-        //Sets teh title to use bold Noto Sans at size 60, aligned center, and with color #1C94E9
+        //Sets the title to use bold Noto Sans at size 60, aligned center, and with theme-appropriate color
         titleLabel.setFont(new Font("Noto Sans", Font.BOLD, 60));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        titleLabel.setForeground(Color.decode("#1C94E9"));
+        titleLabel.setForeground(ThemeManager.getLabelForeground());
         //Calls various configuration methods to configure the panels
         configureVolumePanel(volumePanel);
         configureLengthPanel(lengthPanel);
@@ -496,10 +818,34 @@ public class App{
         //Sets maximum width of the mainPanel to 600 and adds the tabPane to it in the center
         mainPanel.setSize(new Dimension(600, 0));
         mainPanel.add(tabPanes, BorderLayout.CENTER);
+        //Set mainPanel background to match theme
+        mainPanel.setBackground(ThemeManager.getPanelBackground());
+        //Set static references for theme updates
+        mainFrame=frame;
+        App.tabPanes=tabPanes;
+        titleLabelStatic=titleLabel;
+        //Create theme toggle button
+        themeToggleButton=new JButton(ThemeManager.getModeButtonText());
+        themeToggleButton.setFont(new Font("Noto Sans", Font.BOLD, 16));
+        themeToggleButton.setToolTipText(ThemeManager.getModeDescription());
+        themeToggleButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        themeToggleButton.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        themeToggleButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                ThemeManager.cycleMode();
+                themeToggleButton.setToolTipText(ThemeManager.getModeDescription());
+                themeToggleButton.setText(ThemeManager.getModeButtonText());
+            }
+        });
+        //Create panel for title and toggle button
+        JPanel titlePanel=new JPanel(new BorderLayout());
+        titlePanel.add(titleLabel, BorderLayout.CENTER);
+        titlePanel.add(themeToggleButton, BorderLayout.EAST);
+        titlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         //Calls the configureMainFrame method to configure the frame
         configureMainFrame(frame);
         //Appends everything to the frame
-        frame.add(titleLabel, BorderLayout.PAGE_START);
+        frame.add(titlePanel, BorderLayout.PAGE_START);
         frame.add(mainPanel);
         frame.pack();
         frame.setSize(800, 600);
