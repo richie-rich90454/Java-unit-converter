@@ -34,15 +34,15 @@ It focuses on **clarity, correctness, and ease of use**, without external depend
 ## 🖥 Demo & Interface
 
 <p align="center">
-  <img src="src/main/resources/images/demo/image_one.png" width="250"/>
-  <img src="src/main/resources/images/demo/image_two.png" width="250"/>
-  <img src="src/main/resources/images/demo/image_three.png" width="250"/>
+  <img src="../src/main/resources/images/demo/image_one.png" width="250"/>
+  <img src="../src/main/resources/images/demo/image_two.png" width="250"/>
+  <img src="../src/main/resources/images/demo/image_three.png" width="250"/>
 </p>
 
 <p align="center">
-  <img src="src/main/resources/images/demo/image_four.png" width="250"/>
-  <img src="src/main/resources/images/demo/image_five.png" width="250"/>
-  <img src="src/main/resources/images/demo/image_six.png" width="250"/>
+  <img src="../src/main/resources/images/demo/image_four.png" width="250"/>
+  <img src="../src/main/resources/images/demo/image_five.png" width="250"/>
+  <img src="../src/main/resources/images/demo/image_six.png" width="250"/>
 </p>
 
 ---
