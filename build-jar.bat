@@ -12,7 +12,7 @@ mkdir build
 
 REM Compile
 echo Compiling...
-javac -d build src\main\java\App.java
+javac -d build src\main\java\ConverterApp.java
 
 if %errorlevel% neq 0 (
     echo Compilation failed!
