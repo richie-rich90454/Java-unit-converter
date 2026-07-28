@@ -47,7 +47,7 @@ jobs:
           fi
           echo "version=$VER" >> "$GITHUB_OUTPUT"
           # jpackage --app-version requires X.Y.Z format (integers only)
-          PKG_VER=$(echo "$VER" | grep -oE '^[0-9]+\.[0-9]+\.[0-9]+' || echo "0.0.0")
+          PKG_VER=$(echo "$VER" | grep -oE '^[0-9]+\.[0-9]+\.[0-9]+' || echo "1.0.0")
           echo "pkg-version=$PKG_VER" >> "$GITHUB_OUTPUT"
 
       - name: Upload JAR
