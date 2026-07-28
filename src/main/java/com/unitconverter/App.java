@@ -69,8 +69,8 @@ public class App{
             JOptionPane.showMessageDialog(null, "Please select two distinct units for conversion between them.");
             return;
         }
-        while (unitPanel.getComponentCount()>8){
-            unitPanel.remove(8);
+        while (unitPanel.getComponentCount()>7){
+            unitPanel.remove(7);
         }
         if (unitOneIndex!=unitTwoIndex){
             JPanel newConversionBox=new JPanel();
@@ -459,10 +459,23 @@ public class App{
         volumePanel.add(Box.createVerticalStrut(7));
         generateVolume=new JButton("Generate Conversion");
         generateVolume.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        volumePanel.add(generateVolume);
         generateVolume.setAlignmentX(Component.CENTER_ALIGNMENT);
         generateVolume.setToolTipText("Generate the volume conversion box");
         generateVolume.addActionListener(buttonHandler);
+        themeToggleButtons[0]=new JButton(isDarkMode?"Light":"Dark");
+        themeToggleButtons[0].setFont(new Font("Noto Sans", Font.PLAIN, 10));
+        themeToggleButtons[0].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        themeToggleButtons[0].addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                toggleTheme();
+            }
+        });
+        JPanel volumeBtnRow=new JPanel();
+        volumeBtnRow.setLayout(new BoxLayout(volumeBtnRow, BoxLayout.X_AXIS));
+        volumeBtnRow.add(generateVolume);
+        volumeBtnRow.add(Box.createHorizontalStrut(4));
+        volumeBtnRow.add(themeToggleButtons[0]);
+        volumePanel.add(volumeBtnRow);
     }
     public static void configureLengthPanel(JPanel lengthPanel){
         JLabel noticeLabelForNegativeSign=new JLabel("<html><center>Note: Any \"-\" entered with no trailing number would be treated as -1.</center></html>");
@@ -486,9 +499,22 @@ public class App{
         generateLength=new JButton("Generate Conversion");
         generateLength.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         generateLength.setAlignmentX(Component.CENTER_ALIGNMENT);
-        lengthPanel.add(generateLength);
         generateLength.setToolTipText("Generate the length conversion box");
         generateLength.addActionListener(buttonHandler);
+        themeToggleButtons[1]=new JButton(isDarkMode?"Light":"Dark");
+        themeToggleButtons[1].setFont(new Font("Noto Sans", Font.PLAIN, 10));
+        themeToggleButtons[1].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        themeToggleButtons[1].addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                toggleTheme();
+            }
+        });
+        JPanel lengthBtnRow=new JPanel();
+        lengthBtnRow.setLayout(new BoxLayout(lengthBtnRow, BoxLayout.X_AXIS));
+        lengthBtnRow.add(generateLength);
+        lengthBtnRow.add(Box.createHorizontalStrut(4));
+        lengthBtnRow.add(themeToggleButtons[1]);
+        lengthPanel.add(lengthBtnRow);
     }
     public static void configureTemperaturePanel(JPanel temperaturePanel){
         JLabel noticeLabelForAbsoluteZero=new JLabel("<html><center>Note: 1. Any values for temperature below absolute 0 (-459.67 Degrees Fahrenheit, -273.15 Degrees Celsius, or 0 Kelvin) would be taken as their respective absolute 0 values. <br>2.Any \\\"-\\\" entered with no trailing number would be treated as -1.</center></html>");
@@ -512,9 +538,22 @@ public class App{
         generateTemperature=new JButton("Generate Conversion");
         generateTemperature.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         generateTemperature.setAlignmentX(Component.CENTER_ALIGNMENT);
-        temperaturePanel.add(generateTemperature);
         generateTemperature.setToolTipText("Generate the temperature conversion box");
         generateTemperature.addActionListener(buttonHandler);
+        themeToggleButtons[2]=new JButton(isDarkMode?"Light":"Dark");
+        themeToggleButtons[2].setFont(new Font("Noto Sans", Font.PLAIN, 10));
+        themeToggleButtons[2].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        themeToggleButtons[2].addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                toggleTheme();
+            }
+        });
+        JPanel tempBtnRow=new JPanel();
+        tempBtnRow.setLayout(new BoxLayout(tempBtnRow, BoxLayout.X_AXIS));
+        tempBtnRow.add(generateTemperature);
+        tempBtnRow.add(Box.createHorizontalStrut(4));
+        tempBtnRow.add(themeToggleButtons[2]);
+        temperaturePanel.add(tempBtnRow);
     }
     public static void configureTabPanes(JTabbedPane tabPanes){
         tabPanes.setSize(new Dimension(600, 0));
@@ -562,27 +601,6 @@ public class App{
         mainPanel.setSize(new Dimension(600, 0));
         mainPanel.add(tabPanes, BorderLayout.CENTER);
         configureMainFrame(frame);
-        for (int b=0;b<3;b++){
-            if (isDarkMode){
-                themeToggleButtons[b]=new JButton("Light");
-            }
-            else{
-                themeToggleButtons[b]=new JButton("Dark");
-            }
-            themeToggleButtons[b].setFont(new Font("Noto Sans", Font.PLAIN, 10));
-            themeToggleButtons[b].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            themeToggleButtons[b].addActionListener(new ActionListener(){
-                public void actionPerformed(ActionEvent e){
-                    toggleTheme();
-                }
-            });
-        }
-        volumePanel.add(Box.createVerticalStrut(5));
-        volumePanel.add(themeToggleButtons[0]);
-        lengthPanel.add(Box.createVerticalStrut(5));
-        lengthPanel.add(themeToggleButtons[1]);
-        temperaturePanel.add(Box.createVerticalStrut(5));
-        temperaturePanel.add(themeToggleButtons[2]);
         frame.add(titleLabel, BorderLayout.PAGE_START);
         frame.add(mainPanel);
         frame.pack();
