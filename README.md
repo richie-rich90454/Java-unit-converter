@@ -98,7 +98,8 @@ The conversion engine uses precomputed ratio tables for Volume and Length, and d
 
 ### Prerequisites
 
-- Java Development Kit (JDK) **8 or later** ([download](https://adoptium.net/))
+- **JDK 25** for building (the compiler targets Java 8 bytecode automatically)
+- **JRE 8 or later** for running the raw JAR
 - (Optional) Maven 3.6+ ([download](https://maven.apache.org/download.cgi))
 - No other dependencies required
 
@@ -244,12 +245,12 @@ The bundled runtime is stripped of debug symbols, man pages, and header files to
 
 ### Build Matrix
 
-| Artifact | JDK | Purpose |
-|----------|-----|---------|
-| Raw JAR | 8 | Maximum compatibility -- runs on any JRE 8 or later |
-| Native installer | 25 | Bundles a JRE 25 via `jlink` -- no JVM required on target |
+| Artifact | Toolchain | Target JRE | Purpose |
+|----------|-----------|------------|---------|
+| Raw JAR | JDK 25 with `--release 8` | 8+ | Runs on any JRE 8 or later |
+| Native installer | JDK 25 `jpackage` | 25 (bundled) | No JVM required on target |
 
-The raw JAR is compiled with JDK 8 so it runs on any system JVM from version 8 upward. The native installers use JDK 25's `jpackage` to embed a minimal JRE 25 runtime, making them fully self-contained.
+Everything is built with **JDK 25**. The compiler flag `--release 8` produces Java 8 bytecode so the raw JAR works on any JRE from version 8 upward. The native installers use JDK 25's `jpackage` to embed a minimal JRE 25 runtime, making them fully self-contained.
 
 ### Prerequisites for Local jpackage Builds
 
@@ -260,8 +261,6 @@ The raw JAR is compiled with JDK 8 so it runs on any system JVM from version 8 u
 ### Local jpackage Example
 
 ```shell
-# Compile with JDK 8 for maximum JAR compatibility, then
-# package with JDK 25 for the bundled JRE
 mvn clean package
 jpackage \
   --type deb \

@@ -8,8 +8,7 @@
     <packaging>jar</packaging>
     <name>Java Unit Converter</name>
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.release>8</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <build>
@@ -32,8 +31,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.12.1</version>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <release>8</release>
                 </configuration>
             </plugin>
             <plugin>
