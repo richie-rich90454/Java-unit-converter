@@ -562,23 +562,28 @@ public class App{
         mainPanel.setSize(new Dimension(600, 0));
         mainPanel.add(tabPanes, BorderLayout.CENTER);
         configureMainFrame(frame);
-        JPanel topPanel=new JPanel(new BorderLayout());
-        topPanel.add(titleLabel, BorderLayout.CENTER);
-        if (isDarkMode){
-            themeToggleButton=new JButton("Light Mode");
-        }
-        else{
-            themeToggleButton=new JButton("Dark Mode");
-        }
-        themeToggleButton.setFont(new Font("Noto Sans", Font.BOLD, 12));
-        themeToggleButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        themeToggleButton.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                toggleTheme();
+        for (int b=0;b<3;b++){
+            if (isDarkMode){
+                themeToggleButtons[b]=new JButton("Light");
             }
-        });
-        topPanel.add(themeToggleButton, BorderLayout.SOUTH);
-        frame.add(topPanel, BorderLayout.PAGE_START);
+            else{
+                themeToggleButtons[b]=new JButton("Dark");
+            }
+            themeToggleButtons[b].setFont(new Font("Noto Sans", Font.PLAIN, 10));
+            themeToggleButtons[b].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            themeToggleButtons[b].addActionListener(new ActionListener(){
+                public void actionPerformed(ActionEvent e){
+                    toggleTheme();
+                }
+            });
+        }
+        volumePanel.add(Box.createVerticalStrut(5));
+        volumePanel.add(themeToggleButtons[0]);
+        lengthPanel.add(Box.createVerticalStrut(5));
+        lengthPanel.add(themeToggleButtons[1]);
+        temperaturePanel.add(Box.createVerticalStrut(5));
+        temperaturePanel.add(themeToggleButtons[2]);
+        frame.add(titleLabel, BorderLayout.PAGE_START);
         frame.add(mainPanel);
         frame.pack();
         frame.setSize(800, 600);
