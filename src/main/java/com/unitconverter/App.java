@@ -463,7 +463,7 @@ public class App{
         generateVolume.setToolTipText("Generate the volume conversion box");
         generateVolume.addActionListener(buttonHandler);
         themeToggleButtons[0]=new JButton(isDarkMode?"Light":"Dark");
-        themeToggleButtons[0].setFont(new Font("Noto Sans", Font.PLAIN, 10));
+        themeToggleButtons[0].setFont(new Font("Noto Sans", Font.BOLD, 14));
         themeToggleButtons[0].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         themeToggleButtons[0].addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
@@ -502,7 +502,7 @@ public class App{
         generateLength.setToolTipText("Generate the length conversion box");
         generateLength.addActionListener(buttonHandler);
         themeToggleButtons[1]=new JButton(isDarkMode?"Light":"Dark");
-        themeToggleButtons[1].setFont(new Font("Noto Sans", Font.PLAIN, 10));
+        themeToggleButtons[1].setFont(new Font("Noto Sans", Font.BOLD, 14));
         themeToggleButtons[1].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         themeToggleButtons[1].addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
@@ -541,7 +541,7 @@ public class App{
         generateTemperature.setToolTipText("Generate the temperature conversion box");
         generateTemperature.addActionListener(buttonHandler);
         themeToggleButtons[2]=new JButton(isDarkMode?"Light":"Dark");
-        themeToggleButtons[2].setFont(new Font("Noto Sans", Font.PLAIN, 10));
+        themeToggleButtons[2].setFont(new Font("Noto Sans", Font.BOLD, 14));
         themeToggleButtons[2].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         themeToggleButtons[2].addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
