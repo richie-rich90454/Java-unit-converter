@@ -17,7 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.plaf.BorderUIResource;
@@ -36,13 +35,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Locale;
-import java.util.Properties;
 import java.awt.BorderLayout;
 
 public class App{
@@ -63,14 +58,13 @@ public class App{
 
     static boolean isDarkMode;
     static Color currentAccent;
+    static final Color TAB_SELECTED = Color.decode("#FADE54");
     static final Color LIGHT_ACCENT = Color.decode("#1C94E9");
     static final Color DARK_ACCENT = Color.decode("#64B5F6");
     static final Color LIGHT_BG = Color.decode("#FFFFFF");
     static final Color DARK_BG = Color.decode("#1E1E1E");
     static final Color DARK_SURFACE = Color.decode("#2D2D2D");
     static final Color DARK_TEXT = Color.decode("#E0E0E0");
-    static final Color DARK_BORDER = Color.decode("#555555");
-    static final String THEME_FILE = System.getProperty("user.dir") + "/.unitconverter-theme.properties";
 
     public static void generateConverterBox(JPanel unitPanel, JComboBox<String> selectBoxOne, JComboBox<String> selectBoxTwo, String[] convertingUnits, double[] unitConversionTable, boolean isTemperatureConversion){
         int unitOneIndex=selectBoxOne.getSelectedIndex();
@@ -92,13 +86,13 @@ public class App{
             unitTwoField.setToolTipText("Input your value for unit "+convertingUnits[unitTwoIndex]+" here");
             JLabel unitOneLabel=new JLabel(convertingUnits[unitOneIndex]);
             unitOneLabel.setFont(new Font("EB Garamond", Font.PLAIN, 17));
-            unitOneLabel.setForeground(currentAccent);
+            unitOneLabel.setForeground(Color.decode("#1C94E9"));
             newConversionBox.add(unitOneLabel);
             newConversionBox.add(unitOneField);
             newConversionBox.add(Box.createVerticalStrut(15));
             JLabel unitTwoLabel=new JLabel(convertingUnits[unitTwoIndex]);
             unitTwoLabel.setFont(new Font("EB Garamond", Font.PLAIN, 17));
-            unitTwoLabel.setForeground(currentAccent);
+            unitTwoLabel.setForeground(Color.decode("#1C94E9"));
             newConversionBox.add(unitTwoLabel);
             newConversionBox.add(unitTwoField);
             unitPanel.add(Box.createVerticalStrut(20));
@@ -250,39 +244,9 @@ public class App{
         return false;
     }
 
-    static void loadThemePreference(){
-        File f=new File(THEME_FILE);
-        if (f.exists()){
-            try (FileInputStream fis=new FileInputStream(f)){
-                Properties props=new Properties();
-                props.load(fis);
-                String mode=props.getProperty("theme.mode", "LIGHT");
-                isDarkMode=mode.equalsIgnoreCase("DARK");
-            }
-            catch (Exception e){
-                isDarkMode=false;
-            }
-        }
-        else{
-            isDarkMode=isSystemDarkMode();
-        }
-    }
-
-    static void saveThemePreference(){
-        try (FileOutputStream fos=new FileOutputStream(THEME_FILE)){
-            Properties props=new Properties();
-            props.setProperty("theme.mode", isDarkMode ? "DARK" : "LIGHT");
-            props.store(fos, "Unit Converter Theme Preferences");
-        }
-        catch (Exception e){
-            // silently ignore write failures
-        }
-    }
-
     static void applyTheme(){
         currentAccent=isDarkMode ? DARK_ACCENT : LIGHT_ACCENT;
         UIManager.put("Panel.background", isDarkMode ? DARK_BG : LIGHT_BG);
-        UIManager.put("OptionPane.background", isDarkMode ? DARK_BG : LIGHT_BG);
         UIManager.put("Button.background", Color.decode("#DE0000"));
         UIManager.put("Button.foreground", Color.decode("#FFFFFF"));
         UIManager.put("TextField.background", isDarkMode ? DARK_SURFACE : LIGHT_BG);
@@ -293,15 +257,10 @@ public class App{
         UIManager.put("Label.foreground", currentAccent);
         UIManager.put("ToolTip.background", isDarkMode ? Color.decode("#424242") : Color.decode("#FADE54"));
         UIManager.put("ToolTip.foreground", isDarkMode ? DARK_TEXT : Color.decode("#000000"));
-        UIManager.put("ToolTip.border", new BorderUIResource.LineBorderUIResource(isDarkMode ? DARK_BORDER : Color.decode("#000000"), 1));
+        UIManager.put("ToolTip.border", new BorderUIResource.LineBorderUIResource(isDarkMode ? Color.decode("#616161") : Color.decode("#000000"), 1));
         UIManager.put("TitledBorder.titleColor", isDarkMode ? DARK_TEXT : Color.decode("#000000"));
-        UIManager.put("TabbedPane.contentAreaColor", isDarkMode ? DARK_BG : LIGHT_BG);
         UIManager.put("TabbedPane.background", isDarkMode ? DARK_SURFACE : LIGHT_BG);
         UIManager.put("TabbedPane.foreground", currentAccent);
-        UIManager.put("TabbedPane.selected", isDarkMode ? DARK_SURFACE : LIGHT_BG);
-        UIManager.put("TabbedPane.selectedForeground", isDarkMode ? DARK_TEXT : Color.decode("#000000"));
-        UIManager.put("TabbedPane.tabAreaBackground", isDarkMode ? DARK_BG : LIGHT_BG);
-        UIManager.put("TabbedPane.unselectedBackground", isDarkMode ? DARK_SURFACE : LIGHT_BG);
     }
 
     static void refreshComponentColors(Container container){
@@ -327,15 +286,12 @@ public class App{
                 tp.setBackground(isDarkMode ? DARK_SURFACE : LIGHT_BG);
                 for (int i=0;i<tp.getTabCount();i++){
                     tp.setForegroundAt(i, currentAccent);
-                    tp.setBackgroundAt(i, isDarkMode ? DARK_SURFACE : LIGHT_BG);
+                    tp.setBackgroundAt(i, TAB_SELECTED);
                 }
             }
             if (c instanceof JLabel){
                 JLabel label=(JLabel) c;
-                Color fg=label.getForeground();
-                if (fg.equals(LIGHT_ACCENT)||fg.equals(DARK_ACCENT)){
-                    label.setForeground(currentAccent);
-                }
+                label.setForeground(currentAccent);
             }
             if (c instanceof Container){
                 refreshComponentColors((Container) c);
@@ -354,18 +310,17 @@ public class App{
             tabPanes.setBackground(isDarkMode ? DARK_SURFACE : LIGHT_BG);
             for (int i=0;i<tabPanes.getTabCount();i++){
                 tabPanes.setForegroundAt(i, currentAccent);
-                tabPanes.setBackgroundAt(i, isDarkMode ? DARK_SURFACE : LIGHT_BG);
+                tabPanes.setBackgroundAt(i, TAB_SELECTED);
             }
             tabPanes.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(currentAccent, 2), BorderFactory.createEmptyBorder(7, 7, 7, 7)));
         }
         if (themeToggleButton!=null){
             themeToggleButton.setText(isDarkMode ? "Light Mode" : "Dark Mode");
         }
-        saveThemePreference();
     }
 
     static{
-        loadThemePreference();
+        isDarkMode=isSystemDarkMode();
         applyTheme();
         includeFont("/fonts/NotoSans-Regular.ttf");
         includeFont("/fonts/NotoSans-Bold.ttf");
@@ -522,7 +477,7 @@ public class App{
         tabPanes.addTab("Temperature", temperaturePanel);
         for (int i=0;i<tabPanes.getTabCount();i++){
             tabPanes.setForegroundAt(i, currentAccent);
-            tabPanes.setBackgroundAt(i, isDarkMode ? DARK_SURFACE : LIGHT_BG);
+            tabPanes.setBackgroundAt(i, TAB_SELECTED);
         }
     }
 
