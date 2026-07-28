@@ -13,14 +13,19 @@ Please follow these guidelines to make the contribution process smooth and fast.
 How to build and run locally
 - JDK 8+ is required.
 - From the project root:
-  - Compile:
-    mkdir -p out
-    find src -name "*.java" > sources.txt
-    javac -d out @sources.txt
-  - Create a runnable JAR:
-    jar --create --file=app.jar -C out .
-  - Run:
-    java -jar app.jar
+  - Quick start (no Maven required):
+    .\launch.bat
+  - With Maven (build):
+    mvn clean package
+  - With Maven (run via java -jar):
+    mvn clean package
+    java -jar target\UnitConverter.jar
+  - Without Maven (manual):
+    mkdir -p target\classes
+    dir /b /s src\main\java\*.java > sources.txt
+    javac -d target\classes -encoding UTF-8 @sources.txt
+    xcopy /e /y src\main\resources target\classes\
+    java -cp target\classes com.unitconverter.App
 
 Code style
 - Use clear, descriptive names.
