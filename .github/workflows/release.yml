@@ -88,20 +88,31 @@ jobs:
         run: mvn clean package
 
       - name: Create native installer (bundles JRE 25 -- no JVM required on target)
+        shell: bash
         env:
           APP_VERSION: ${{ needs.build-jar.outputs.version }}
+          OS_NAME: ${{ matrix.name }}
         run: |
-          jpackage \
-            --type ${{ matrix.installer-type }} \
-            --input target \
-            --main-jar ${{ env.APP_NAME }}.jar \
-            --main-class ${{ env.MAIN_CLASS }} \
-            --name ${{ env.APP_NAME }} \
-            --app-version "$APP_VERSION" \
-            --description "Java Unit Converter" \
-            --vendor "richie-rich90454" \
-            ${{ matrix.icon-flag }} \
-            --destination target/installer
+          JPACKAGE_OPTS=(
+            --type "${{ matrix.installer-type }}"
+            --input target
+            --main-jar "${{ env.APP_NAME }}.jar"
+            --main-class "${{ env.MAIN_CLASS }}"
+            --name "${{ env.APP_NAME }}"
+            --app-version "$APP_VERSION"
+            --description "Java Unit Converter"
+            --vendor "richie-rich90454"
+          )
+          if [[ "$OS_NAME" == Windows* ]]; then
+            JPACKAGE_OPTS+=(--win-menu --win-shortcut)
+          elif [[ "$OS_NAME" == macOS* ]]; then
+            JPACKAGE_OPTS+=(--mac-package-identifier com.unitconverter.app)
+          elif [[ "$OS_NAME" == Linux* ]]; then
+            JPACKAGE_OPTS+=(--linux-deb-maintainer "rjiang880@gmail.com")
+            JPACKAGE_OPTS+=(--icon src/main/resources/favicon.png)
+          fi
+          JPACKAGE_OPTS+=(--dest target/installer)
+          jpackage "${JPACKAGE_OPTS[@]}"
 
       - name: Upload installer
         uses: actions/upload-artifact@v4
