@@ -58,7 +58,7 @@ public class App{
 
     static boolean isDarkMode;
     static Color currentAccent;
-    static final Color TAB_SELECTED = Color.decode("#FADE54");
+    static final Color TAB_SELECTED = Color.decode("#FFFFFF");
     static final Color LIGHT_ACCENT = Color.decode("#1C94E9");
     static final Color DARK_ACCENT = Color.decode("#64B5F6");
     static final Color LIGHT_BG = Color.decode("#FFFFFF");
@@ -285,8 +285,8 @@ public class App{
                 tp.setForeground(currentAccent);
                 tp.setBackground(isDarkMode ? DARK_SURFACE : LIGHT_BG);
                 for (int i=0;i<tp.getTabCount();i++){
-                    tp.setForegroundAt(i, currentAccent);
-                    tp.setBackgroundAt(i, TAB_SELECTED);
+                    tp.setForegroundAt(i, TAB_SELECTED);
+                    tp.setBackgroundAt(i, currentAccent);
                 }
             }
             if (c instanceof JLabel){
@@ -309,8 +309,8 @@ public class App{
             tabPanes.setForeground(currentAccent);
             tabPanes.setBackground(isDarkMode ? DARK_SURFACE : LIGHT_BG);
             for (int i=0;i<tabPanes.getTabCount();i++){
-                tabPanes.setForegroundAt(i, currentAccent);
-                tabPanes.setBackgroundAt(i, TAB_SELECTED);
+                tabPanes.setForegroundAt(i, TAB_SELECTED);
+                tabPanes.setBackgroundAt(i, currentAccent);
             }
             tabPanes.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(currentAccent, 2), BorderFactory.createEmptyBorder(7, 7, 7, 7)));
         }
@@ -476,8 +476,8 @@ public class App{
         tabPanes.addTab("Length", lengthPanel);
         tabPanes.addTab("Temperature", temperaturePanel);
         for (int i=0;i<tabPanes.getTabCount();i++){
-            tabPanes.setForegroundAt(i, currentAccent);
-            tabPanes.setBackgroundAt(i, TAB_SELECTED);
+            tabPanes.setForegroundAt(i, TAB_SELECTED);
+            tabPanes.setBackgroundAt(i, currentAccent);
         }
     }
 
@@ -513,14 +513,14 @@ public class App{
         JPanel topPanel=new JPanel(new BorderLayout());
         topPanel.add(titleLabel, BorderLayout.CENTER);
         themeToggleButton=new JButton(isDarkMode ? "Light Mode" : "Dark Mode");
-        themeToggleButton.setFont(new Font("Noto Sans", Font.PLAIN, 12));
+        themeToggleButton.setFont(new Font("Noto Sans", Font.BOLD, 12));
         themeToggleButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         themeToggleButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 toggleTheme();
             }
         });
-        topPanel.add(themeToggleButton, BorderLayout.EAST);
+        topPanel.add(themeToggleButton, BorderLayout.SOUTH);
         frame.add(topPanel, BorderLayout.PAGE_START);
         frame.add(mainPanel);
         frame.pack();
