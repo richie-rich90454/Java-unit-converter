@@ -42,9 +42,12 @@ jobs:
           TAG="${{ github.event.inputs.tag || github.ref_name }}"
           VER="${TAG#v}"
           if [ "$VER" = "main" ] || [ "$VER" = "" ]; then
-            VER="dev-$(date +%Y%m%d)"
+            VER="$(date +%Y%m%d)-dev"
           fi
           echo "version=$VER" >> "$GITHUB_OUTPUT"
+          # jpackage --app-version requires X.Y.Z format (integers only)
+          PKG_VER=$(echo "$VER" | grep -oE '^[0-9]+\.[0-9]+\.[0-9]+' || echo "0.0.0")
+          echo "pkg-version=$PKG_VER" >> "$GITHUB_OUTPUT"
 
       - name: Upload JAR
         uses: actions/upload-artifact@v4
@@ -90,7 +93,7 @@ jobs:
       - name: Create native installer (bundles JRE 25 -- no JVM required on target)
         shell: bash
         env:
-          APP_VERSION: ${{ needs.build-jar.outputs.version }}
+          APP_VERSION: ${{ needs.build-jar.outputs.pkg-version }}
           OS_NAME: ${{ matrix.name }}
         run: |
           JPACKAGE_OPTS=(
