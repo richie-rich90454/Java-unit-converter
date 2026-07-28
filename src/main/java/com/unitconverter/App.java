@@ -288,6 +288,10 @@ public class App{
         for (Component c : container.getComponents()){
             if (c instanceof JPanel){
                 c.setBackground(isDarkMode ? DARK_BG : LIGHT_BG);
+                javax.swing.border.Border b=((JPanel) c).getBorder();
+                if (b instanceof TitledBorder){
+                    ((TitledBorder) b).setTitleColor(isDarkMode ? DARK_TEXT : Color.decode("#000000"));
+                }
             }
             if (c instanceof JTextField){
                 c.setBackground(isDarkMode ? DARK_SURFACE : LIGHT_BG);
