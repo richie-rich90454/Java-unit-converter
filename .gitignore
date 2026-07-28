@@ -19,8 +19,7 @@
 *.tar.gz
 *.rar
 
-# Do not ignore UnitConverter.jar
-!UnitConverter.jar
+# Maven builds to target/UnitConverter.jar
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
@@ -162,7 +161,13 @@ dist
 .pnp.*
 # Ignores compiled files
 output
-# Adds exception to not ignore UnitConverter.exe
-!UnitConverter.exe
+# Launch4j exe is built in dist/
+# UnitConverter.exe is no longer tracked at root
 # Ignores META-INF
 META-INF
+
+# Maven build output
+target/
+
+# launch.bat temp file
+sources.tmp
