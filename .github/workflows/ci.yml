@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build with JDK ${{ matrix.java }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        java: [8, 11, 17, 21]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Verify JAR structure
+        shell: bash
+        run: jar tf target/UnitConverter.jar | grep -q "com/unitconverter/App.class" && echo "JAR is valid"
