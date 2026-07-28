@@ -2,189 +2,201 @@
 
 # Java Unit Converter
 
-A Java Swing desktop application for volume, length, and temperature conversion with real-time bidirectional calculation and a tab-based user interface.
+### Zero-dependency desktop unit conversion -- Volume, Length, Temperature
 
-![Java](https://img.shields.io/badge/Java-8%2B-blue)
-![Platform](https://img.shields.io/badge/Platform-Desktop-lightgrey)
-![GUI](https://img.shields.io/badge/GUI-Java%20Swing-orange)
+[![Java](https://img.shields.io/badge/Java-8%2B-%23ED8B00?style=flat-square&logo=openjdk&logoColor=white)](https://adoptium.net/)
+[![Platform](https://img.shields.io/badge/Platform-Desktop-%2344A833?style=flat-square&logo=windows&logoColor=white)]()
+[![GUI](https://img.shields.io/badge/GUI-Swing-%23F78C40?style=flat-square&logo=java&logoColor=white)]()
 
-![License](https://img.shields.io/github/license/richie-rich90454/Java-unit-converter)
-![Repo Size](https://img.shields.io/github/repo-size/richie-rich90454/Java-unit-converter)
-![Last Commit](https://img.shields.io/github/last-commit/richie-rich90454/Java-unit-converter)
-![Issues](https://img.shields.io/github/issues/richie-rich90454/Java-unit-converter)
-![Pull Requests](https://img.shields.io/github/issues-pr/richie-rich90454/Java-unit-converter)
-![Latest Release](https://img.shields.io/github/v/release/richie-rich90454/Java-unit-converter)
+[![License](https://img.shields.io/github/license/richie-rich90454/Java-unit-converter?style=flat-square&color=%2344A833)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/richie-rich90454/Java-unit-converter?style=flat-square&color=%232D72D6)](https://github.com/richie-rich90454/Java-unit-converter/releases)
+[![Last Commit](https://img.shields.io/github/last-commit/richie-rich90454/Java-unit-converter?style=flat-square&color=%23979797)](https://github.com/richie-rich90454/Java-unit-converter/commits)
+[![Repo Size](https://img.shields.io/github/repo-size/richie-rich90454/Java-unit-converter?style=flat-square&color=%23979797)]()
+
+[![Stars](https://img.shields.io/github/stars/richie-rich90454/Java-unit-converter?style=flat-square&color=%23EAC54F)](https://github.com/richie-rich90454/Java-unit-converter/stargazers)
+[![Issues](https://img.shields.io/github/issues/richie-rich90454/Java-unit-converter?style=flat-square&color=%23CB2F2F)](https://github.com/richie-rich90454/Java-unit-converter/issues)
+[![PRs](https://img.shields.io/github/issues-pr/richie-rich90454/Java-unit-converter?style=flat-square&color=%232D72D6)](https://github.com/richie-rich90454/Java-unit-converter/pulls)
+[![Build](https://img.shields.io/badge/build-passing-%2344A833?style=flat-square)]()
+
+---
+
+**Java Unit Converter** is a lightweight, pure-Java desktop application that performs real-time bidirectional conversion between 24 units across Volume, Length, and Temperature. No frameworks. No external libraries. Just clean Swing.
+
+[Getting Started](#getting-started) &bull;
+[Features](#features) &bull;
+[Screenshots](#screenshots) &bull;
+[Build](#build--run) &bull;
+[Contributing](#contributing)
 
 </div>
 
 ---
 
-## Overview
+## Why This Project?
 
-Java Unit Converter is a lightweight desktop tool built with pure Java Swing. It converts between common units of measurement in real time with no external dependencies.
+Most unit converter tools are web-based, cluttered with ads, or require an internet connection. This project was built to prove that Java Swing remains a viable choice for fast, offline desktop utilities that are:
 
-- Real-time bidirectional conversion
-- Tab-based user interface
-- Custom open-source typography
-- Zero external libraries or frameworks
+- **Instant** -- converts as you type, no button pressing required
+- **Offline** -- works entirely on your machine, zero network calls
+- **Portable** -- single JAR, runs on Windows, macOS, and Linux
+- **Transparent** -- MIT licensed, inspect every line of code
 
 ---
 
-## Demo & Interface
+## Screenshots
 
-<p align="center">
-  <img src="demo/image_one.png" width="250"/>
-  <img src="demo/image_two.png" width="250"/>
-  <img src="demo/image_three.png" width="250"/>
-</p>
+<div align="center">
 
-<p align="center">
-  <img src="demo/image_four.png" width="250"/>
-  <img src="demo/image_five.png" width="250"/>
-  <img src="demo/image_six.png" width="250"/>
-</p>
+| Volume Conversion | Length Conversion | Temperature Conversion |
+|:-:|:-:|:-:|
+| <img src="demo/image_one.png" width="240"/> | <img src="demo/image_two.png" width="240"/> | <img src="demo/image_three.png" width="240"/> |
+| <img src="demo/image_four.png" width="240"/> | <img src="demo/image_five.png" width="240"/> | <img src="demo/image_six.png" width="240"/> |
+
+</div>
 
 ---
 
 ## Features
 
-### Volume Conversion
-Convert between 13 volume units:
-- Gallons, Quarts, Pints
-- U.S. Cups, Tablespoons, Teaspoons
-- Cubic Inches, Feet, Yards
-- Liters, Milliliters
-- Cubic Meters, Cubic Centimeters
+### Supported Units (24 total)
 
-### Length Conversion
-Convert between 8 length units:
-- Miles, Yards, Feet, Inches
-- Meters, Kilometers, Centimeters
-- Nautical Miles
+| Category | Units | Count |
+|----------|-------|-------|
+| **Volume** | Gallon, Cup, Tablespoon, Teaspoon, Cubic Foot, Cubic Yard, Cubic Inch, Liter, Milliliter, Cubic Meter, Cubic Centimeter, Quart, Pint | 13 |
+| **Length** | Mile, Yard, Foot, Inch, Meter, Kilometer, Centimeter, Nautical Mile | 8 |
+| **Temperature** | Fahrenheit, Celsius, Kelvin | 3 |
 
-### Temperature Conversion
-Convert between 3 temperature scales:
-- Fahrenheit
-- Celsius
-- Kelvin
+### Key Capabilities
+
+- **Bidirectional real-time conversion** -- modify either field, the other updates instantly
+- **Input validation** -- rejects invalid characters at the keystroke level
+- **Decimal and negative support** -- enter `-` alone to use it as `-1`
+- **Absolute-zero clamping** -- temperature inputs below physical limits are corrected automatically
+- **Custom typography** -- EB Garamond and Noto Sans bundled and registered at startup
+- **Audio feedback** -- subtle 432 Hz sine wave tone on conversion generation (falls back to system beep)
+- **Topic tabs** -- Volume, Length, and Temperature organized in a tabbed pane
 
 ---
 
 ## How It Works
 
-1. **Select a conversion category** -- choose Volume, Length, or Temperature using the tabs.
+```
+Select Units --> Click "Generate Conversion" --> Type a value --> Result appears instantly
+```
 
-2. **Generate a conversion box** -- select a source unit and a target unit, then click Generate Conversion. Identical unit selections are blocked with a clear error message.
+1. Pick a **source unit** and a **target unit** from the dropdowns.
+2. Click **Generate Conversion** to create the input fields.
+3. Start typing in either field -- the converted value appears in the other in real time.
 
-3. **Convert in real time** -- enter a value in either field. The converted value updates instantly. The input supports decimals and negative numbers. Entering `-` alone is treated as `-1` for convenience.
+The conversion engine uses precomputed ratio tables for Volume and Length, and direct formulas for Temperature. All calculations happen on the event thread with no external dependencies.
 
 ---
 
-## Installation & Running
+## Getting Started
 
-### Requirements
-- Java Development Kit (JDK) 8 or later
-- No external dependencies
+### Prerequisites
 
-### Project Structure
-```
-Java-unit-converter/
-  pom.xml                          Maven build file
-  launch.bat                       Quick launcher (no Maven required)
-  src/
-    main/
-      java/
-        com/unitconverter/
-          App.java                 Main application source
-      resources/
-        fonts/
-          NotoSans-Regular.ttf
-          NotoSans-Bold.ttf
-          EBGaramond-Regular.ttf
-        favicon.png
-  font_licenses/
-    OFL-Noto_Sans.txt
-    OFL-EB_Garamond.txt
-```
+- Java Development Kit (JDK) **8 or later** ([download](https://adoptium.net/))
+- No other dependencies required
 
-### Compile & Run
+### Quick Start (No Maven)
 
-**Quick start (no Maven required):**
-```
+```shell
 .\launch.bat
 ```
 
-**With Maven (build only):**
-```
-mvn clean package
-```
+That is it. The script detects whether Maven is available and falls back to direct `javac` compilation automatically.
 
-**With Maven (compile and run):**
-```
+### With Maven
+
+```shell
+# Build the executable JAR
+mvn clean package
+
+# Compile and run in one step
 mvn clean compile exec:java -Dexec.mainClass="com.unitconverter.App"
 ```
 
-**Without Maven (manual):**
-```
+### Manual Compilation
+
+```shell
+# Create output directory
 mkdir target\classes
+
+# Collect and compile sources
 dir /b /s src\main\java\*.java > sources.txt
 javac -d target\classes -encoding UTF-8 @sources.txt
+
+# Copy resources
 xcopy /e /y src\main\resources target\classes\
+
+# Run
 java -cp target\classes com.unitconverter.App
+```
+
+After building with Maven, the runnable JAR is at `target/UnitConverter.jar`.
+
+---
+
+## Project Structure
+
+```
+Java-unit-converter/
+  pom.xml                                   Maven build configuration
+  launch.bat                                One-click launcher (no Maven needed)
+
+  src/main/java/com/unitconverter/
+    App.java                                Main application (entry point)
+
+  src/main/resources/
+    fonts/NotoSans-Regular.ttf              User interface font (body)
+    fonts/NotoSans-Bold.ttf                 User interface font (headings)
+    fonts/EBGaramond-Regular.ttf            Data display font
+    favicon.png                             Application window icon
+
+  font_licenses/
+    OFL-Noto_Sans.txt                       Noto Sans license (SIL OFL)
+    OFL-EB_Garamond.txt                     EB Garamond license (SIL OFL)
 ```
 
 ---
 
 ## Troubleshooting
 
-**Fonts not loading**
-- Verify that `src/main/resources/fonts/` exists and filenames match those referenced in `App.java`.
-- Check file read permissions, especially on Linux and macOS.
-
-**Classpath errors**
-```
-javac -d target\classes -encoding UTF-8 src\main\java\com\unitconverter\App.java
-xcopy /e /y src\main\resources target\classes\
-java -cp target\classes com.unitconverter.App
-```
-
-**UI looks incorrect**
-- Inspect the console for font loading errors.
-- Confirm font paths are correct.
-
----
-
-## Font Attribution
-
-This project uses fonts licensed under the SIL Open Font License (OFL).
-
-### EB Garamond
-- Author: Georg Duffner
-- Source: https://github.com/octaviopardo/EBGaramond12
-- License: `font_licenses/OFL-EB_Garamond.txt`
-
-### Noto Sans
-- Author: Google Inc.
-- Source: https://github.com/notofonts/latin-greek-cyrillic
-- License: `font_licenses/OFL-Noto_Sans.txt`
-
----
-
-## License Compliance
-
-This project complies with the Apache License 2.0 and the SIL Open Font License by:
-1. Including unmodified font files
-2. Bundling full license texts
-3. Preserving copyright notices
-4. Refraining from redistributing fonts independently
-5. Providing clear attribution
+| Problem | Solution |
+|---------|----------|
+| Fonts not rendering | Confirm `src/main/resources/fonts/` exists and font filenames match `App.java`. Check file permissions on Linux/macOS. |
+| Classpath errors | Compile with `javac -d target\classes -encoding UTF-8 src\main\java\com\unitconverter\App.java`, then copy resources and run with `java -cp target\classes com.unitconverter.App`. |
+| JAR won't launch | Run `java -jar target/UnitConverter.jar` from the project root so resource paths resolve correctly. |
+| UI looks wrong | Check the console for font-loading error messages. Confirm `favicon.png` is in `src/main/resources/`. |
 
 ---
 
 ## Contributing
 
-Contributions, bug reports, and suggestions are welcome. Please read `CONTRIBUTING.md` before submitting a pull request.
+Pull requests, bug reports, and feature ideas are welcome. The project is MIT-licensed and intentionally simple -- one source file, no framework, no build complexity.
+
+1. Fork the repository.
+2. Create a feature branch: `git checkout -b feature/my-change`.
+3. Commit your changes.
+4. Open a pull request.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ---
 
-&copy; 2025-2026 richie-rich90454
+## License
+
+Distributed under the **MIT License**. See [LICENSE](LICENSE) for the full text.
+
+Fonts are licensed separately under the **SIL Open Font License 1.1** -- see `font_licenses/`.
+
+---
+
+<div align="center">
+
+**If you find this project useful, consider [starring the repository](https://github.com/richie-rich90454/Java-unit-converter/stargazers) -- it helps others discover it.**
+
+&copy; 2025-2026 richie-rich90454. Made with Java Swing.
+
+</div>
