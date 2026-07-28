@@ -97,17 +97,31 @@ The conversion engine uses precomputed ratio tables for Volume and Length, and d
 ### Prerequisites
 
 - Java Development Kit (JDK) **8 or later** ([download](https://adoptium.net/))
+- (Optional) Maven 3.6+ ([download](https://maven.apache.org/download.cgi))
 - No other dependencies required
 
-### Quick Start (No Maven)
+### Quick Start
 
-```shell
+#### Windows (PowerShell)
+```powershell
 .\launch.bat
 ```
+The launch script detects whether Maven is available and falls back to direct `javac` compilation automatically.
 
-That is it. The script detects whether Maven is available and falls back to direct `javac` compilation automatically.
+#### macOS / Linux
+```shell
+# Option 1: with Maven
+mvn clean compile exec:java -Dexec.mainClass="com.unitconverter.App"
 
-### With Maven
+# Option 2: manual compilation
+mkdir -p target/classes
+find src/main/java -name "*.java" > sources.txt
+javac -d target/classes -encoding UTF-8 @sources.txt
+cp -r src/main/resources/* target/classes/
+java -cp target/classes com.unitconverter.App
+```
+
+### Build with Maven (all platforms)
 
 ```shell
 # Build the executable JAR
@@ -117,24 +131,49 @@ mvn clean package
 mvn clean compile exec:java -Dexec.mainClass="com.unitconverter.App"
 ```
 
-### Manual Compilation
+After building, the runnable JAR is at `target/UnitConverter.jar`.
 
-```shell
+### Manual Compilation by Platform
+
+<details>
+<summary>Windows (PowerShell)</summary>
+
+```powershell
 # Create output directory
-mkdir target\classes
+New-Item -ItemType Directory -Path target\classes -Force
 
 # Collect and compile sources
-dir /b /s src\main\java\*.java > sources.txt
+Get-ChildItem -Recurse -Filter *.java src\main\java | ForEach-Object { $_.FullName } | Out-File -Encoding ascii sources.txt
 javac -d target\classes -encoding UTF-8 @sources.txt
 
 # Copy resources
-xcopy /e /y src\main\resources target\classes\
+Copy-Item -Recurse src\main\resources\* target\classes\
 
 # Run
 java -cp target\classes com.unitconverter.App
 ```
 
-After building with Maven, the runnable JAR is at `target/UnitConverter.jar`.
+</details>
+
+<details>
+<summary>macOS / Linux</summary>
+
+```shell
+# Create output directory
+mkdir -p target/classes
+
+# Collect and compile sources
+find src/main/java -name "*.java" > sources.txt
+javac -d target/classes -encoding UTF-8 @sources.txt
+
+# Copy resources
+cp -r src/main/resources/* target/classes/
+
+# Run
+java -cp target/classes com.unitconverter.App
+```
+
+</details>
 
 ---
 
