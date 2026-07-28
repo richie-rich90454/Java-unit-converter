@@ -217,19 +217,35 @@ public class App{
     }
 
     static boolean isSystemDarkMode(){
+        String os=System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
         try{
-            Process p=Runtime.getRuntime().exec("reg query \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize\" /v AppsUseLightTheme");
-            BufferedReader reader=new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line;
-            while ((line=reader.readLine())!=null){
-                if (line.contains("AppsUseLightTheme")){
-                    String trimmed=line.trim();
-                    return trimmed.endsWith("0x0");
+            if (os.contains("mac")||os.contains("darwin")){
+                Process p=Runtime.getRuntime().exec("defaults read -g AppleInterfaceStyle");
+                BufferedReader r=new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String line=r.readLine();
+                if (line!=null&&line.equalsIgnoreCase("Dark")) return true;
+            }
+            else if (os.contains("win")){
+                Process p=Runtime.getRuntime().exec("reg query \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize\" /v AppsUseLightTheme");
+                BufferedReader r=new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String line;
+                while ((line=r.readLine())!=null){
+                    if (line.contains("AppsUseLightTheme")&&line.trim().endsWith("0x0")) return true;
                 }
+            }
+            else{
+                Process p=Runtime.getRuntime().exec("gsettings get org.gnome.desktop.interface color-scheme");
+                BufferedReader r=new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String line=r.readLine();
+                if (line!=null&&line.toLowerCase(Locale.ENGLISH).contains("dark")) return true;
+                p=Runtime.getRuntime().exec("gsettings get org.gnome.desktop.interface gtk-theme");
+                r=new BufferedReader(new InputStreamReader(p.getInputStream()));
+                line=r.readLine();
+                if (line!=null&&line.toLowerCase(Locale.ENGLISH).contains("dark")) return true;
             }
         }
         catch (Exception e){
-            // non-Windows or no access, fall through
+            // platform unsupported or no access, fall through to light mode
         }
         return false;
     }
@@ -281,7 +297,11 @@ public class App{
         UIManager.put("TitledBorder.titleColor", isDarkMode ? DARK_TEXT : Color.decode("#000000"));
         UIManager.put("TabbedPane.contentAreaColor", isDarkMode ? DARK_BG : LIGHT_BG);
         UIManager.put("TabbedPane.background", isDarkMode ? DARK_SURFACE : LIGHT_BG);
+        UIManager.put("TabbedPane.foreground", currentAccent);
         UIManager.put("TabbedPane.selected", isDarkMode ? DARK_SURFACE : LIGHT_BG);
+        UIManager.put("TabbedPane.selectedForeground", isDarkMode ? DARK_TEXT : Color.decode("#000000"));
+        UIManager.put("TabbedPane.tabAreaBackground", isDarkMode ? DARK_BG : LIGHT_BG);
+        UIManager.put("TabbedPane.unselectedBackground", isDarkMode ? DARK_SURFACE : LIGHT_BG);
     }
 
     static void refreshComponentColors(Container container){
@@ -300,6 +320,15 @@ public class App{
             if (c instanceof JComboBox){
                 c.setBackground(isDarkMode ? DARK_SURFACE : Color.decode("#1C94E9"));
                 c.setForeground(isDarkMode ? DARK_TEXT : Color.decode("#FFFFFF"));
+            }
+            if (c instanceof JTabbedPane){
+                JTabbedPane tp=(JTabbedPane) c;
+                tp.setForeground(currentAccent);
+                tp.setBackground(isDarkMode ? DARK_SURFACE : LIGHT_BG);
+                for (int i=0;i<tp.getTabCount();i++){
+                    tp.setForegroundAt(i, currentAccent);
+                    tp.setBackgroundAt(i, isDarkMode ? DARK_SURFACE : LIGHT_BG);
+                }
             }
             if (c instanceof JLabel){
                 JLabel label=(JLabel) c;
@@ -322,6 +351,11 @@ public class App{
             frame.getContentPane().setBackground(isDarkMode ? DARK_BG : LIGHT_BG);
             titleLabel.setForeground(currentAccent);
             tabPanes.setForeground(currentAccent);
+            tabPanes.setBackground(isDarkMode ? DARK_SURFACE : LIGHT_BG);
+            for (int i=0;i<tabPanes.getTabCount();i++){
+                tabPanes.setForegroundAt(i, currentAccent);
+                tabPanes.setBackgroundAt(i, isDarkMode ? DARK_SURFACE : LIGHT_BG);
+            }
             tabPanes.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(currentAccent, 2), BorderFactory.createEmptyBorder(7, 7, 7, 7)));
         }
         if (themeToggleButton!=null){
@@ -481,10 +515,15 @@ public class App{
     public static void configureTabPanes(JTabbedPane tabPanes){
         tabPanes.setSize(new Dimension(600, 0));
         tabPanes.setForeground(currentAccent);
+        tabPanes.setBackground(isDarkMode ? DARK_SURFACE : LIGHT_BG);
         tabPanes.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(currentAccent, 2), BorderFactory.createEmptyBorder(7, 7, 7, 7)));
         tabPanes.addTab("Volume", volumePanel);
         tabPanes.addTab("Length", lengthPanel);
         tabPanes.addTab("Temperature", temperaturePanel);
+        for (int i=0;i<tabPanes.getTabCount();i++){
+            tabPanes.setForegroundAt(i, currentAccent);
+            tabPanes.setBackgroundAt(i, isDarkMode ? DARK_SURFACE : LIGHT_BG);
+        }
     }
 
     public static void playBeep(){
@@ -521,7 +560,11 @@ public class App{
         themeToggleButton=new JButton(isDarkMode ? "Light Mode" : "Dark Mode");
         themeToggleButton.setFont(new Font("Noto Sans", Font.PLAIN, 12));
         themeToggleButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        themeToggleButton.addActionListener(e -> toggleTheme());
+        themeToggleButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                toggleTheme();
+            }
+        });
         topPanel.add(themeToggleButton, BorderLayout.EAST);
         frame.add(topPanel, BorderLayout.PAGE_START);
         frame.add(mainPanel);
