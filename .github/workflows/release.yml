@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Tag to release (e.g. v1.0.0). Leave empty to use the latest commit."
+        description: "Tag to release (e.g. v1.0.0). Leave empty for a dev build."
         required: false
         type: string
 
@@ -20,18 +20,18 @@ env:
 
 jobs:
   build-jar:
-    name: Build JAR
+    name: Build JAR (JDK 8)
     runs-on: ubuntu-24.04
     outputs:
       version: ${{ steps.version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up JDK 8
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 8
 
       - name: Build with Maven
         run: mvn clean package
@@ -63,40 +63,34 @@ jobs:
             installer-type: exe
             installer-ext: exe
             icon-flag: ""
-            app-image-ext: ""
           - os: macos-26
             name: macOS arm64
             installer-type: dmg
             installer-ext: dmg
             icon-flag: ""
-            app-image-ext: dmg
           - os: ubuntu-24.04
             name: Linux x64
             installer-type: deb
             installer-ext: deb
             icon-flag: --icon src/main/resources/favicon.png
-            app-image-ext: ""
-          - os: ubuntu-24.04-arm
-            name: Linux arm64
-            installer-type: deb
-            installer-ext: deb
-            icon-flag: --icon src/main/resources/favicon.png
-            app-image-ext: ""
     runs-on: ${{ matrix.os }}
     needs: build-jar
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up JDK 25
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 25
 
-      - name: Build with Maven
-        run: mvn clean package
+      - name: Download JAR (JDK 8 compiled)
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.APP_NAME }}
+          path: target
 
-      - name: Create native installer (bundles JRE -- no JVM required on target)
+      - name: Create native installer (bundles JRE 25 -- no JVM required on target)
         env:
           APP_VERSION: ${{ needs.build-jar.outputs.version }}
         run: |
@@ -115,7 +109,7 @@ jobs:
       - name: Upload installer
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.APP_NAME }}-${{ matrix.name }}-installer
+          name: ${{ env.APP_NAME }}-${{ matrix.name }}
           path: target/installer/*.${{ matrix.installer-ext }}
 
   publish-release:
@@ -127,16 +121,12 @@ jobs:
         with:
           path: artifacts
 
-      - name: List all artifacts
-        run: find artifacts -type f | sort
-
       - name: Publish to GitHub Release
         if: ${{ startsWith(github.ref_name, 'v') || github.event.inputs.tag != '' }}
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tag || github.ref_name }}
           name: ${{ env.APP_NAME }} ${{ needs.build-jar.outputs.version }}
-          body_path: /dev/null
           files: artifacts/**/*
           generate_release_notes: true
           fail_on_unmatched_files: false

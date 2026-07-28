@@ -242,15 +242,26 @@ UnitConverter/
 
 The bundled runtime is stripped of debug symbols, man pages, and header files to minimize size.
 
+### Build Matrix
+
+| Artifact | JDK | Purpose |
+|----------|-----|---------|
+| Raw JAR | 8 | Maximum compatibility -- runs on any JRE 8 or later |
+| Native installer | 25 | Bundles a JRE 25 via `jlink` -- no JVM required on target |
+
+The raw JAR is compiled with JDK 8 so it runs on any system JVM from version 8 upward. The native installers use JDK 25's `jpackage` to embed a minimal JRE 25 runtime, making them fully self-contained.
+
 ### Prerequisites for Local jpackage Builds
 
-- JDK 14 or later (jpackage is bundled with the JDK starting from JDK 14)
+- JDK 25 (jpackage is bundled with the JDK starting from JDK 14)
 - On Linux: `dpkg-deb` and `fakeroot` (for `.deb` builds)
 - On Windows: no additional tools required (for `.exe`; `.msi` requires WiX Toolset)
 
 ### Local jpackage Example
 
 ```shell
+# Compile with JDK 8 for maximum JAR compatibility, then
+# package with JDK 25 for the bundled JRE
 mvn clean package
 jpackage \
   --type deb \
