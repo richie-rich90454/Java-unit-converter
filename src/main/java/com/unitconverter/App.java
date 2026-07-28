@@ -42,7 +42,7 @@ public class App{
     static JPanel volumePanel, lengthPanel, temperaturePanel;
     static JComboBox<String> volumeDropdownOne, volumeDropdownTwo, lengthDropdownOne, lengthDropdownTwo, temperatureDropdownOne, temperatureDropdownTwo;
     static JButton generateVolume, generateLength, generateTemperature;
-    static JButton themeToggleButton;
+    static JButton[] themeToggleButtons=new JButton[3];
     static byte[] audioInformation;
     static Clip beepAudioClip;
     static JFrame frame;
@@ -55,7 +55,7 @@ public class App{
     public static final String[] temperatureUnits={"Fahrenheit", "Celsius", "Kelvin"};
     static boolean isDarkMode;
     static Color currentAccent;
-    static final Color TAB_SELECTED=Color.decode("#FADE54");
+    static final Color TAB_SELECTED=Color.decode("#F0F0F0");
     static final Color LIGHT_ACCENT=Color.decode("#1C94E9");
     static final Color DARK_ACCENT=Color.decode("#64B5F6");
     static final Color LIGHT_BG=Color.decode("#FFFFFF");
@@ -69,8 +69,8 @@ public class App{
             JOptionPane.showMessageDialog(null, "Please select two distinct units for conversion between them.");
             return;
         }
-        while (unitPanel.getComponentCount()>7){
-            unitPanel.remove(7);
+        while (unitPanel.getComponentCount()>8){
+            unitPanel.remove(8);
         }
         if (unitOneIndex!=unitTwoIndex){
             JPanel newConversionBox=new JPanel();
@@ -363,12 +363,14 @@ public class App{
             }
             tabPanes.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(currentAccent, 2), BorderFactory.createEmptyBorder(7, 7, 7, 7)));
         }
-        if (themeToggleButton!=null){
-            if (isDarkMode){
-                themeToggleButton.setText("Light Mode");
-            }
-            else{
-                themeToggleButton.setText("Dark Mode");
+        for (int b=0;b<themeToggleButtons.length;b++){
+            if (themeToggleButtons[b]!=null){
+                if (isDarkMode){
+                    themeToggleButtons[b].setText("Light");
+                }
+                else{
+                    themeToggleButtons[b].setText("Dark");
+                }
             }
         }
     }
