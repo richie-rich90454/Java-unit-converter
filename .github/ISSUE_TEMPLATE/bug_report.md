@@ -9,22 +9,22 @@ assignees: []
 **Describe the bug**
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+**To reproduce**
 Steps to reproduce the behavior:
 1. Go to '...'
 2. Click on '...'
-3. Enter '...'
-4. See error
+3. Scroll down to '...'
+4. See the error
 
 **Expected behavior**
-What you expected to happen.
+A clear and concise description of what you expected to happen.
 
 **Screenshots**
-If applicable, add screenshots to help explain your problem.
+If applicable, add screenshots to help explain the problem.
 
-**Environment (please complete the following information):**
- - OS: [e.g. Windows 10, macOS 12]
- - Java version: [e.g. 11, 17]
+**Environment (please complete the following):**
+ - OS: [for example, Windows 10, macOS 14, Ubuntu 22.04]
+ - Java version: [for example, 11, 17, 21]
  - App version or commit: [if known]
 
 **Additional context**
