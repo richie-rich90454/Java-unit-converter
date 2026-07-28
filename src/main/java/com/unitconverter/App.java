@@ -58,7 +58,7 @@ public class App{
 
     static boolean isDarkMode;
     static Color currentAccent;
-    static final Color TAB_SELECTED = Color.decode("#FFFFFF");
+    static final Color TAB_SELECTED = Color.decode("#000000");
     static final Color LIGHT_ACCENT = Color.decode("#1C94E9");
     static final Color DARK_ACCENT = Color.decode("#64B5F6");
     static final Color LIGHT_BG = Color.decode("#FFFFFF");
