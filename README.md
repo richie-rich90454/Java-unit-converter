@@ -16,7 +16,8 @@
 [![Stars](https://img.shields.io/github/stars/richie-rich90454/Java-unit-converter?style=flat-square&color=%23EAC54F)](https://github.com/richie-rich90454/Java-unit-converter/stargazers)
 [![Issues](https://img.shields.io/github/issues/richie-rich90454/Java-unit-converter?style=flat-square&color=%23CB2F2F)](https://github.com/richie-rich90454/Java-unit-converter/issues)
 [![PRs](https://img.shields.io/github/issues-pr/richie-rich90454/Java-unit-converter?style=flat-square&color=%232D72D6)](https://github.com/richie-rich90454/Java-unit-converter/pulls)
-[![Build](https://img.shields.io/badge/build-passing-%2344A833?style=flat-square)]()
+[![CI](https://img.shields.io/github/actions/workflow/status/richie-rich90454/Java-unit-converter/ci.yml?style=flat-square&label=CI&color=%2344A833)](https://github.com/richie-rich90454/Java-unit-converter/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/actions/workflow/status/richie-rich90454/Java-unit-converter/release.yml?style=flat-square&label=release&color=%232D72D6)](https://github.com/richie-rich90454/Java-unit-converter/actions/workflows/release.yml)
 
 ---
 
@@ -25,7 +26,8 @@
 [Getting Started](#getting-started) &bull;
 [Features](#features) &bull;
 [Screenshots](#screenshots) &bull;
-[Build](#build--run) &bull;
+[Build](#build-with-maven-all-platforms) &bull;
+[Native Installers](#building-native-installers) &bull;
 [Contributing](#contributing)
 
 </div>
@@ -197,6 +199,52 @@ Java-unit-converter/
     OFL-Noto_Sans.txt                       Noto Sans license (SIL OFL)
     OFL-EB_Garamond.txt                     EB Garamond license (SIL OFL)
 ```
+
+---
+
+## Building Native Installers
+
+This project includes a GitHub Actions workflow that automatically builds native platform installers when a version tag is pushed.
+
+### Triggering a Release Build
+
+```shell
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+The workflow produces the following artifacts per release:
+
+| Platform | Installer | Also Included |
+|----------|-----------|---------------|
+| Windows x64 | `.exe` (bundled JDK) | Raw `.jar` (system JVM) |
+| macOS arm64 | `.dmg` (bundled JDK) | Raw `.jar` (system JVM) |
+| Linux x64 | `.deb` (bundled JDK) | Raw `.jar` (system JVM) |
+
+All artifacts are automatically attached to the GitHub Release page.
+
+### Prerequisites for Local jpackage Builds
+
+- JDK 14 or later (jpackage is included in the JDK starting from version 14)
+- On Linux: `dpkg-deb` and `fakeroot` (for `.deb`)
+
+### Local jpackage Example
+
+```shell
+mvn clean package
+jpackage \
+  --type deb \
+  --input target \
+  --main-jar UnitConverter.jar \
+  --main-class com.unitconverter.App \
+  --name UnitConverter \
+  --app-version "1.0.0" \
+  --description "Java Unit Converter" \
+  --vendor "richie-rich90454" \
+  --destination target/installer
+```
+
+Adjust `--type` for your platform: `exe` (Windows), `dmg` (macOS), `deb` or `rpm` (Linux). For full options, see the [jpackage documentation](https://docs.oracle.com/en/java/javase/17/jpackage/).
 
 ---
 
