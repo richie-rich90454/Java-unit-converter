@@ -1,5 +1,4 @@
 package com.unitconverter;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -39,7 +38,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Locale;
 import java.awt.BorderLayout;
-
 public class App{
     static JPanel volumePanel, lengthPanel, temperaturePanel;
     static JComboBox<String> volumeDropdownOne, volumeDropdownTwo, lengthDropdownOne, lengthDropdownTwo, temperatureDropdownOne, temperatureDropdownTwo;
@@ -52,20 +50,18 @@ public class App{
     static JTabbedPane tabPanes;
     public static final double[] conversionTableForVolume={3.78541, 0.236588, 0.014787, 0.004929, 28.3168, 764.555, 0.016387, 1, 0.001, 1000, 0.001, 0.946353, 0.473176};
     public static final double[] conversionTableForLength={1609.344, 0.9144, 0.3048, 0.0254, 1, 1000, 0.01, 1852};
-    public static final String[] volumeUnits={"Gallon", "U.S. Cup", "Tablespoon", "Teaspoon", "Cubic Feet", "Cubic Yard", "Cubic Inch", "Liter", "Milliliter", "Cubic Meter", "Cubic Centimeter", "Quart", "Pint"}; 
+    public static final String[] volumeUnits={"Gallon", "U.S. Cup", "Tablespoon", "Teaspoon", "Cubic Feet", "Cubic Yard", "Cubic Inch", "Liter", "Milliliter", "Cubic Meter", "Cubic Centimeter", "Quart", "Pint"};
     public static final String[] lengthUnits={"Mile", "Yard", "Feet", "Inch", "Meter", "Kilometer", "Centimeter", "Nautical Mile"};
     public static final String[] temperatureUnits={"Fahrenheit", "Celsius", "Kelvin"};
-
     static boolean isDarkMode;
     static Color currentAccent;
-    static final Color TAB_SELECTED = Color.decode("#000000");
-    static final Color LIGHT_ACCENT = Color.decode("#1C94E9");
-    static final Color DARK_ACCENT = Color.decode("#64B5F6");
-    static final Color LIGHT_BG = Color.decode("#FFFFFF");
-    static final Color DARK_BG = Color.decode("#1E1E1E");
-    static final Color DARK_SURFACE = Color.decode("#2D2D2D");
-    static final Color DARK_TEXT = Color.decode("#E0E0E0");
-
+    static final Color TAB_SELECTED=Color.decode("#FADE54");
+    static final Color LIGHT_ACCENT=Color.decode("#1C94E9");
+    static final Color DARK_ACCENT=Color.decode("#64B5F6");
+    static final Color LIGHT_BG=Color.decode("#FFFFFF");
+    static final Color DARK_BG=Color.decode("#1E1E1E");
+    static final Color DARK_SURFACE=Color.decode("#2D2D2D");
+    static final Color DARK_TEXT=Color.decode("#E0E0E0");
     public static void generateConverterBox(JPanel unitPanel, JComboBox<String> selectBoxOne, JComboBox<String> selectBoxTwo, String[] convertingUnits, double[] unitConversionTable, boolean isTemperatureConversion){
         int unitOneIndex=selectBoxOne.getSelectedIndex();
         int unitTwoIndex=selectBoxTwo.getSelectedIndex();
@@ -164,7 +160,6 @@ public class App{
             unitTwoField.addKeyListener(numberInputHandle);
         }
     }
-
     public static double convertTemperature(double inputValue, int inputIndex, int writeIndex){
         if (inputIndex==0&&inputValue<-459.67){
             inputValue=-459.67;
@@ -195,11 +190,9 @@ public class App{
         }
         return inputValue;
     }
-
     public static String formatDoubleValues(double number){
         return String.format("%.5f", number);
     }
-
     public static void includeFont(String fontPath){
         try (InputStream fontFile=App.class.getResourceAsStream(fontPath)){
             Font newFont=Font.createFont(Font.TRUETYPE_FONT, fontFile);
@@ -209,7 +202,6 @@ public class App{
             System.err.println("Failed to load font "+fontPath+": "+exception);
         }
     }
-
     static boolean isSystemDarkMode(){
         String os=System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
         try{
@@ -217,76 +209,124 @@ public class App{
                 Process p=Runtime.getRuntime().exec("defaults read -g AppleInterfaceStyle");
                 BufferedReader r=new BufferedReader(new InputStreamReader(p.getInputStream()));
                 String line=r.readLine();
-                if (line!=null&&line.equalsIgnoreCase("Dark")) return true;
+                if (line!=null&&line.equalsIgnoreCase("Dark")){
+                    return true;
+                }
             }
             else if (os.contains("win")){
                 Process p=Runtime.getRuntime().exec("reg query \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize\" /v AppsUseLightTheme");
                 BufferedReader r=new BufferedReader(new InputStreamReader(p.getInputStream()));
                 String line;
                 while ((line=r.readLine())!=null){
-                    if (line.contains("AppsUseLightTheme")&&line.trim().endsWith("0x0")) return true;
+                    if (line.contains("AppsUseLightTheme")&&line.trim().endsWith("0x0")){
+                        return true;
+                    }
                 }
             }
             else{
                 Process p=Runtime.getRuntime().exec("gsettings get org.gnome.desktop.interface color-scheme");
                 BufferedReader r=new BufferedReader(new InputStreamReader(p.getInputStream()));
                 String line=r.readLine();
-                if (line!=null&&line.toLowerCase(Locale.ENGLISH).contains("dark")) return true;
+                if (line!=null&&line.toLowerCase(Locale.ENGLISH).contains("dark")){
+                    return true;
+                }
                 p=Runtime.getRuntime().exec("gsettings get org.gnome.desktop.interface gtk-theme");
                 r=new BufferedReader(new InputStreamReader(p.getInputStream()));
                 line=r.readLine();
-                if (line!=null&&line.toLowerCase(Locale.ENGLISH).contains("dark")) return true;
+                if (line!=null&&line.toLowerCase(Locale.ENGLISH).contains("dark")){
+                    return true;
+                }
             }
         }
         catch (Exception e){
-            // platform unsupported or no access, fall through to light mode
         }
         return false;
     }
-
     static void applyTheme(){
-        currentAccent=isDarkMode ? DARK_ACCENT : LIGHT_ACCENT;
-        UIManager.put("Panel.background", isDarkMode ? DARK_BG : LIGHT_BG);
+        if (isDarkMode){
+            currentAccent=DARK_ACCENT;
+            UIManager.put("Panel.background", DARK_BG);
+            UIManager.put("TextField.background", DARK_SURFACE);
+            UIManager.put("TextField.foreground", DARK_TEXT);
+            UIManager.put("TextField.caretForeground", DARK_TEXT);
+            UIManager.put("ComboBox.background", DARK_SURFACE);
+            UIManager.put("ComboBox.foreground", DARK_TEXT);
+            UIManager.put("ToolTip.background", Color.decode("#424242"));
+            UIManager.put("ToolTip.foreground", DARK_TEXT);
+            UIManager.put("ToolTip.border", new BorderUIResource.LineBorderUIResource(Color.decode("#616161"), 1));
+            UIManager.put("TitledBorder.titleColor", DARK_TEXT);
+            UIManager.put("TabbedPane.background", DARK_SURFACE);
+        }
+        else{
+            currentAccent=LIGHT_ACCENT;
+            UIManager.put("Panel.background", LIGHT_BG);
+            UIManager.put("TextField.background", LIGHT_BG);
+            UIManager.put("TextField.foreground", Color.decode("#000000"));
+            UIManager.put("TextField.caretForeground", Color.decode("#000000"));
+            UIManager.put("ComboBox.background", Color.decode("#1C94E9"));
+            UIManager.put("ComboBox.foreground", Color.decode("#FFFFFF"));
+            UIManager.put("ToolTip.background", Color.decode("#FADE54"));
+            UIManager.put("ToolTip.foreground", Color.decode("#000000"));
+            UIManager.put("ToolTip.border", new BorderUIResource.LineBorderUIResource(Color.decode("#000000"), 1));
+            UIManager.put("TitledBorder.titleColor", Color.decode("#000000"));
+            UIManager.put("TabbedPane.background", LIGHT_BG);
+        }
         UIManager.put("Button.background", Color.decode("#DE0000"));
         UIManager.put("Button.foreground", Color.decode("#FFFFFF"));
-        UIManager.put("TextField.background", isDarkMode ? DARK_SURFACE : LIGHT_BG);
-        UIManager.put("TextField.foreground", isDarkMode ? DARK_TEXT : Color.decode("#000000"));
-        UIManager.put("TextField.caretForeground", isDarkMode ? DARK_TEXT : Color.decode("#000000"));
-        UIManager.put("ComboBox.background", isDarkMode ? DARK_SURFACE : Color.decode("#1C94E9"));
-        UIManager.put("ComboBox.foreground", isDarkMode ? DARK_TEXT : Color.decode("#FFFFFF"));
         UIManager.put("Label.foreground", currentAccent);
-        UIManager.put("ToolTip.background", isDarkMode ? Color.decode("#424242") : Color.decode("#FADE54"));
-        UIManager.put("ToolTip.foreground", isDarkMode ? DARK_TEXT : Color.decode("#000000"));
-        UIManager.put("ToolTip.border", new BorderUIResource.LineBorderUIResource(isDarkMode ? Color.decode("#616161") : Color.decode("#000000"), 1));
-        UIManager.put("TitledBorder.titleColor", isDarkMode ? DARK_TEXT : Color.decode("#000000"));
-        UIManager.put("TabbedPane.background", isDarkMode ? DARK_SURFACE : LIGHT_BG);
         UIManager.put("TabbedPane.foreground", currentAccent);
     }
-
     static void refreshComponentColors(Container container){
         for (Component c : container.getComponents()){
             if (c instanceof JPanel){
-                c.setBackground(isDarkMode ? DARK_BG : LIGHT_BG);
+                if (isDarkMode){
+                    c.setBackground(DARK_BG);
+                }
+                else{
+                    c.setBackground(LIGHT_BG);
+                }
                 javax.swing.border.Border b=((JPanel) c).getBorder();
                 if (b instanceof TitledBorder){
-                    ((TitledBorder) b).setTitleColor(isDarkMode ? DARK_TEXT : Color.decode("#000000"));
+                    if (isDarkMode){
+                        ((TitledBorder) b).setTitleColor(DARK_TEXT);
+                    }
+                    else{
+                        ((TitledBorder) b).setTitleColor(Color.decode("#000000"));
+                    }
                 }
             }
             if (c instanceof JTextField){
-                c.setBackground(isDarkMode ? DARK_SURFACE : LIGHT_BG);
-                c.setForeground(isDarkMode ? DARK_TEXT : Color.decode("#000000"));
+                if (isDarkMode){
+                    c.setBackground(DARK_SURFACE);
+                    c.setForeground(DARK_TEXT);
+                }
+                else{
+                    c.setBackground(LIGHT_BG);
+                    c.setForeground(Color.decode("#000000"));
+                }
             }
             if (c instanceof JComboBox){
-                c.setBackground(isDarkMode ? DARK_SURFACE : Color.decode("#1C94E9"));
-                c.setForeground(isDarkMode ? DARK_TEXT : Color.decode("#FFFFFF"));
+                if (isDarkMode){
+                    c.setBackground(DARK_SURFACE);
+                    c.setForeground(DARK_TEXT);
+                }
+                else{
+                    c.setBackground(Color.decode("#1C94E9"));
+                    c.setForeground(Color.decode("#FFFFFF"));
+                }
             }
             if (c instanceof JTabbedPane){
                 JTabbedPane tp=(JTabbedPane) c;
                 tp.setForeground(currentAccent);
-                tp.setBackground(isDarkMode ? DARK_SURFACE : LIGHT_BG);
+                if (isDarkMode){
+                    tp.setBackground(DARK_SURFACE);
+                }
+                else{
+                    tp.setBackground(LIGHT_BG);
+                }
                 for (int i=0;i<tp.getTabCount();i++){
-                    tp.setForegroundAt(i, TAB_SELECTED);
-                    tp.setBackgroundAt(i, currentAccent);
+                    tp.setForegroundAt(i, currentAccent);
+                    tp.setBackgroundAt(i, TAB_SELECTED);
                 }
             }
             if (c instanceof JLabel){
@@ -298,27 +338,40 @@ public class App{
             }
         }
     }
-
     static void toggleTheme(){
         isDarkMode=!isDarkMode;
         applyTheme();
         if (frame!=null){
             refreshComponentColors(frame.getContentPane());
-            frame.getContentPane().setBackground(isDarkMode ? DARK_BG : LIGHT_BG);
+            if (isDarkMode){
+                frame.getContentPane().setBackground(DARK_BG);
+            }
+            else{
+                frame.getContentPane().setBackground(LIGHT_BG);
+            }
             titleLabel.setForeground(currentAccent);
             tabPanes.setForeground(currentAccent);
-            tabPanes.setBackground(isDarkMode ? DARK_SURFACE : LIGHT_BG);
+            if (isDarkMode){
+                tabPanes.setBackground(DARK_SURFACE);
+            }
+            else{
+                tabPanes.setBackground(LIGHT_BG);
+            }
             for (int i=0;i<tabPanes.getTabCount();i++){
-                tabPanes.setForegroundAt(i, TAB_SELECTED);
-                tabPanes.setBackgroundAt(i, currentAccent);
+                tabPanes.setForegroundAt(i, currentAccent);
+                tabPanes.setBackgroundAt(i, TAB_SELECTED);
             }
             tabPanes.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(currentAccent, 2), BorderFactory.createEmptyBorder(7, 7, 7, 7)));
         }
         if (themeToggleButton!=null){
-            themeToggleButton.setText(isDarkMode ? "Light Mode" : "Dark Mode");
+            if (isDarkMode){
+                themeToggleButton.setText("Light Mode");
+            }
+            else{
+                themeToggleButton.setText("Dark Mode");
+            }
         }
     }
-
     static{
         isDarkMode=isSystemDarkMode();
         applyTheme();
@@ -352,14 +405,13 @@ public class App{
             System.err.println("Failed to initialize audio"+exception);
         }
     }
-
     public static ActionListener buttonHandler=new ActionListener(){
         @Override
         public void actionPerformed(ActionEvent event){
             new Thread(new Runnable(){
                public void run(){
                 playBeep();
-               } 
+               }
             }).start();
             if (event.getSource().equals(generateVolume)){
                 generateConverterBox(volumePanel, volumeDropdownOne, volumeDropdownTwo, volumeUnits, conversionTableForVolume, false);
@@ -372,7 +424,6 @@ public class App{
             }
         }
     };
-
     public static void configureMainFrame(JFrame frame) throws Exception{
         frame.setTitle("Unit Converter");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -385,7 +436,6 @@ public class App{
             System.err.println("Failed to fetch favicon.");
         }
     }
-
     public static void configureVolumePanel(JPanel volumePanel){
         JLabel noticeLabelForNegativeSign=new JLabel("<html><center>Note: Any \"-\" entered with no trailing number would be treated as -1.</center></html>");
         noticeLabelForNegativeSign.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -412,7 +462,6 @@ public class App{
         generateVolume.setToolTipText("Generate the volume conversion box");
         generateVolume.addActionListener(buttonHandler);
     }
-
     public static void configureLengthPanel(JPanel lengthPanel){
         JLabel noticeLabelForNegativeSign=new JLabel("<html><center>Note: Any \"-\" entered with no trailing number would be treated as -1.</center></html>");
         noticeLabelForNegativeSign.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -439,7 +488,6 @@ public class App{
         generateLength.setToolTipText("Generate the length conversion box");
         generateLength.addActionListener(buttonHandler);
     }
-
     public static void configureTemperaturePanel(JPanel temperaturePanel){
         JLabel noticeLabelForAbsoluteZero=new JLabel("<html><center>Note: 1. Any values for temperature below absolute 0 (-459.67 Degrees Fahrenheit, -273.15 Degrees Celsius, or 0 Kelvin) would be taken as their respective absolute 0 values. <br>2.Any \\\"-\\\" entered with no trailing number would be treated as -1.</center></html>");
         noticeLabelForAbsoluteZero.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -466,21 +514,24 @@ public class App{
         generateTemperature.setToolTipText("Generate the temperature conversion box");
         generateTemperature.addActionListener(buttonHandler);
     }
-
     public static void configureTabPanes(JTabbedPane tabPanes){
         tabPanes.setSize(new Dimension(600, 0));
         tabPanes.setForeground(currentAccent);
-        tabPanes.setBackground(isDarkMode ? DARK_SURFACE : LIGHT_BG);
+        if (isDarkMode){
+            tabPanes.setBackground(DARK_SURFACE);
+        }
+        else{
+            tabPanes.setBackground(LIGHT_BG);
+        }
         tabPanes.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(currentAccent, 2), BorderFactory.createEmptyBorder(7, 7, 7, 7)));
         tabPanes.addTab("Volume", volumePanel);
         tabPanes.addTab("Length", lengthPanel);
         tabPanes.addTab("Temperature", temperaturePanel);
         for (int i=0;i<tabPanes.getTabCount();i++){
-            tabPanes.setForegroundAt(i, TAB_SELECTED);
-            tabPanes.setBackgroundAt(i, currentAccent);
+            tabPanes.setForegroundAt(i, currentAccent);
+            tabPanes.setBackgroundAt(i, TAB_SELECTED);
         }
     }
-
     public static void playBeep(){
         if (beepAudioClip!=null){
             beepAudioClip.setFramePosition(0);
@@ -490,7 +541,6 @@ public class App{
             Toolkit.getDefaultToolkit().beep();
         }
     }
-
     public static void main(String[] args) throws Exception{
         Locale.setDefault(Locale.ENGLISH);
         frame=new JFrame();
@@ -512,7 +562,12 @@ public class App{
         configureMainFrame(frame);
         JPanel topPanel=new JPanel(new BorderLayout());
         topPanel.add(titleLabel, BorderLayout.CENTER);
-        themeToggleButton=new JButton(isDarkMode ? "Light Mode" : "Dark Mode");
+        if (isDarkMode){
+            themeToggleButton=new JButton("Light Mode");
+        }
+        else{
+            themeToggleButton=new JButton("Dark Mode");
+        }
         themeToggleButton.setFont(new Font("Noto Sans", Font.BOLD, 12));
         themeToggleButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         themeToggleButton.addActionListener(new ActionListener(){
