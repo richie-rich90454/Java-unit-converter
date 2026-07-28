@@ -1,0 +1,117 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-jar:
+    name: Build JAR
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Extract version from tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: UnitConverter
+          path: target/UnitConverter.jar
+
+  build-native:
+    name: ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            name: Windows x64
+            type: exe
+            ext: exe
+            icon-flag: ""
+          - os: macos-latest
+            name: macOS arm64
+            type: dmg
+            ext: dmg
+            icon-flag: ""
+          - os: ubuntu-latest
+            name: Linux x64
+            type: deb
+            ext: deb
+            icon-flag: --icon src/main/resources/favicon.png
+    runs-on: ${{ matrix.os }}
+    needs: build-jar
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Create native installer with jpackage
+        env:
+          APP_VERSION: ${{ needs.build-jar.outputs.version }}
+        shell: ${{ matrix.os == 'windows-latest' && 'pwsh' || 'bash' }}
+        run: |
+          jpackage \
+            --type ${{ matrix.type }} \
+            --input target \
+            --main-jar UnitConverter.jar \
+            --main-class com.unitconverter.App \
+            --name UnitConverter \
+            --app-version "$APP_VERSION" \
+            --description "Java Unit Converter" \
+            --vendor "richie-rich90454" \
+            ${{ matrix.icon-flag }} \
+            --destination target/installer
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: UnitConverter-${{ matrix.name }}
+          path: target/installer/*.${{ matrix.ext }}
+
+  publish-release:
+    name: Publish Release
+    needs: [build-jar, build-native]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List all artifacts
+        run: find artifacts -type f | sort
+
+      - name: Publish to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Unit Converter ${{ github.ref_name }}
+          body_path: /dev/null
+          files: artifacts/**/*
+          generate_release_notes: true
+          fail_on_unmatched_files: false
