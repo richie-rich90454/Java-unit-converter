@@ -99,11 +99,19 @@ Convert between **3 temperature scales**:
 ### Project Structure
 ```
 Java-unit-converter/
-├── App.java
-├── fonts/
-│   ├── NotoSans-Regular.ttf
-│   ├── NotoSans-Bold.ttf
-│   └── EBGaramond-Regular.ttf
+├── pom.xml                          # Maven build file
+├── launch.bat                       # Quick launcher (no Maven needed)
+├── src/
+│   └── main/
+│       ├── java/
+│       │   └── com/unitconverter/
+│       │       └── App.java         # Main application
+│       └── resources/
+│           ├── fonts/
+│           │   ├── NotoSans-Regular.ttf
+│           │   ├── NotoSans-Bold.ttf
+│           │   └── EBGaramond-Regular.ttf
+│           └── favicon.png
 └── font_licenses/
     ├── OFL-Noto_Sans.txt
     └── OFL-EB_Garamond.txt
@@ -111,8 +119,21 @@ Java-unit-converter/
 
 ### Compile & Run
 ```bash
-javac *.java
-java App
+# Quick start (no Maven required):
+.\launch.bat
+
+# With Maven (build):
+mvn clean package
+
+# With Maven (compile + run):
+mvn clean compile exec:java -Dexec.mainClass="com.unitconverter.App"
+
+# Without Maven (manual):
+mkdir -p target\classes
+dir /b /s src\main\java\*.java > sources.txt
+javac -d target\classes -encoding UTF-8 @sources.txt
+xcopy /e /y src\main\resources target\classes\
+java -cp target\classes com.unitconverter.App
 ```
 
 ---
@@ -120,13 +141,14 @@ java App
 ## 🧪 Troubleshooting
 
 **Fonts not loading?**
-- Ensure `fonts/` exists and filenames match those in `App.java`
+- Ensure `src/main/resources/fonts/` exists and filenames match those in `App.java`
 - Check file read permissions (especially on Linux/macOS)
 
 **Classpath errors?**
 ```bash
-javac -cp . *.java
-java -cp . App
+javac -d target\classes -encoding UTF-8 src\main\java\com\unitconverter\App.java
+xcopy /e /y src\main\resources target\classes\
+java -cp target\classes com.unitconverter.App
 ```
 
 **UI looks incorrect?**
@@ -169,4 +191,4 @@ If you find this project useful, please consider **starring ⭐ the repository**
 
 ---
 
-© 2025 richie-rich90454
+© 2025-2026 richie-rich90454
