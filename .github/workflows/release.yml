@@ -24,6 +24,7 @@ jobs:
     runs-on: ubuntu-24.04
     outputs:
       version: ${{ steps.version.outputs.version }}
+      pkg-version: ${{ steps.version.outputs.pkg-version }}
     steps:
       - uses: actions/checkout@v4
 
