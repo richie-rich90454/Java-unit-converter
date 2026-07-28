@@ -4,14 +4,24 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to release (e.g. v1.0.0). Leave empty to use the latest commit."
+        required: false
+        type: string
 
 permissions:
   contents: write
 
+env:
+  APP_NAME: UnitConverter
+  MAIN_CLASS: com.unitconverter.App
+
 jobs:
   build-jar:
     name: Build JAR
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       version: ${{ steps.version.outputs.version }}
     steps:
@@ -26,15 +36,21 @@ jobs:
       - name: Build with Maven
         run: mvn clean package
 
-      - name: Extract version from tag
+      - name: Extract version
         id: version
-        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+        run: |
+          TAG="${{ github.event.inputs.tag || github.ref_name }}"
+          VER="${TAG#v}"
+          if [ "$VER" = "main" ] || [ "$VER" = "" ]; then
+            VER="dev-$(date +%Y%m%d)"
+          fi
+          echo "version=$VER" >> "$GITHUB_OUTPUT"
 
       - name: Upload JAR
         uses: actions/upload-artifact@v4
         with:
-          name: UnitConverter
-          path: target/UnitConverter.jar
+          name: ${{ env.APP_NAME }}
+          path: target/${{ env.APP_NAME }}.jar
 
   build-native:
     name: ${{ matrix.name }}
@@ -42,21 +58,30 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-latest
+          - os: windows-2025
             name: Windows x64
-            type: exe
-            ext: exe
+            installer-type: exe
+            installer-ext: exe
             icon-flag: ""
-          - os: macos-latest
+            app-image-ext: ""
+          - os: macos-26
             name: macOS arm64
-            type: dmg
-            ext: dmg
+            installer-type: dmg
+            installer-ext: dmg
             icon-flag: ""
-          - os: ubuntu-latest
+            app-image-ext: dmg
+          - os: ubuntu-24.04
             name: Linux x64
-            type: deb
-            ext: deb
+            installer-type: deb
+            installer-ext: deb
             icon-flag: --icon src/main/resources/favicon.png
+            app-image-ext: ""
+          - os: ubuntu-24.04-arm
+            name: Linux arm64
+            installer-type: deb
+            installer-ext: deb
+            icon-flag: --icon src/main/resources/favicon.png
+            app-image-ext: ""
     runs-on: ${{ matrix.os }}
     needs: build-jar
     steps:
@@ -71,33 +96,32 @@ jobs:
       - name: Build with Maven
         run: mvn clean package
 
-      - name: Create native installer with jpackage
+      - name: Create native installer (bundles JRE -- no JVM required on target)
         env:
           APP_VERSION: ${{ needs.build-jar.outputs.version }}
-        shell: ${{ matrix.os == 'windows-latest' && 'pwsh' || 'bash' }}
         run: |
           jpackage \
-            --type ${{ matrix.type }} \
+            --type ${{ matrix.installer-type }} \
             --input target \
-            --main-jar UnitConverter.jar \
-            --main-class com.unitconverter.App \
-            --name UnitConverter \
+            --main-jar ${{ env.APP_NAME }}.jar \
+            --main-class ${{ env.MAIN_CLASS }} \
+            --name ${{ env.APP_NAME }} \
             --app-version "$APP_VERSION" \
             --description "Java Unit Converter" \
             --vendor "richie-rich90454" \
             ${{ matrix.icon-flag }} \
             --destination target/installer
 
-      - name: Upload installer artifact
+      - name: Upload installer
         uses: actions/upload-artifact@v4
         with:
-          name: UnitConverter-${{ matrix.name }}
-          path: target/installer/*.${{ matrix.ext }}
+          name: ${{ env.APP_NAME }}-${{ matrix.name }}-installer
+          path: target/installer/*.${{ matrix.installer-ext }}
 
   publish-release:
     name: Publish Release
     needs: [build-jar, build-native]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -107,10 +131,11 @@ jobs:
         run: find artifacts -type f | sort
 
       - name: Publish to GitHub Release
+        if: ${{ startsWith(github.ref_name, 'v') || github.event.inputs.tag != '' }}
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
-          name: Unit Converter ${{ github.ref_name }}
+          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
+          name: ${{ env.APP_NAME }} ${{ needs.build-jar.outputs.version }}
           body_path: /dev/null
           files: artifacts/**/*
           generate_release_notes: true
